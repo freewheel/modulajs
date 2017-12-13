@@ -1,0 +1,18 @@
+{
+  "name": "modulajs",
+  "version": "1.0.0",
+  "description": "Manage JavaScript app states using an immutable model tree",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Comcast/modulajs.git"
+  },
+  "keywords": [
+    "modula",
+    "modulajs",
+    "state",
+    "immutable",
+    "model"
+  ],
+  "license": "Apache-2.0"
+}
