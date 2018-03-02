@@ -89,35 +89,39 @@ The beauty of the example service is that it utilize the closure within the `cre
 
 Given that usually a service doesn't need to bound to a specific model, it's recommended to extract the service, test it individually, and even export it as a common stuff to be shared by many models, for example the same pollMessages service as above but reuses a common `intervalService`:
 
-```javascript
-import { intervalService } from 'some-common-services';
+```js
+// interval_service.js
+import { createService } from 'modulajs';
 
-// const intervalService = function(interval, callback) {
-//   return function createService(getModel) {
-//     let intervalId = null;
-//     let pollCounter = 0;
-//
-//     return {
-//       modelDidMount() {
-//         intervalId =
-//           setInterval(() => {
-//             callback(getModel());
-//             pollCounter = pollCounter + 1;
-//           }, 1000);
-//       },
-//
-//       modelWillUnmount() {
-//         if (intervalId !== null) {
-//           clearInterval(intervalId);
-//         }
-//       },
-//
-//       getCounter() {
-//         return pollCounter;
-//       }
-//     };
-//   };
-// }
+export default function intervalService(interval, callback) {
+  return function createService(getModel) {
+    let intervalId = null;
+    let pollCounter = 0;
+
+    return {
+      modelDidMount() {
+        intervalId =
+          setInterval(() => {
+            callback(getModel());
+            pollCounter = pollCounter + 1;
+          }, 1000);
+      },
+
+      modelWillUnmount() {
+        if (intervalId !== null) {
+          clearInterval(intervalId);
+        }
+      },
+
+      getCounter() {
+        return pollCounter;
+      }
+    };
+  };
+}
+
+// model.js
+import { intervalService } from 'interval_service';
 
 const Model = createModel({
   services: {

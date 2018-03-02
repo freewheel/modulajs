@@ -1,59 +1,124 @@
-# eslint-plugin-modulajs
+# ModulaJS
 
 [![NPM version][npm-image]][npm-url]
 [![Apache V2 License][apache-2.0]](LICENSE)
 
-This plugin contains any custom eslint rules for use in development on the [modulajs](https://www.npmjs.com/package/modulajs).
+ModulaJS is created to provide an intuitive and simple way of manage complex state. It introduces Model (an immutable tree) to represent the application state tree. Both actions and reactions are handled inside Model, as well as the communications and side effects. It makes the components in view layer very simple, pure and stateless.
+
+ModulaJS works perfectly with [React](https://reactjs.org/), or any other view library, or vanilla JavaScript.
+
+## Influences
+
+ModulaJS is inspired by [Elm](http://elm-lang.org/) and [Redux](http://redux.js.org/), and built upon redux. Most redux middlewares and the redux dev tools should work seamlessly with ModulaJS.
 
 ## Installation
 
-Prerequisites: Node.js (>=4.x), npm version 2+.
+```sh
+yarn add modulajs
+```
+
+Or use NPM
 
 ```sh
-npm install --save-dev eslint eslint-plugin-modulajs
+npm install --save modulajs
 ```
 
-## Usage
+## Documentation
 
-Add `modulajs` to the plugins section of ESLint config:
+[Introduction](/docs/modula.md)
+* [Store](/docs/store.md)
+* [Model](/docs/model.md)
+  * [Model Side Effects](/docs/model_side_effects.md)
+  * [Model Communications](/docs/model_communications.md)
+  * [Model Life Cycle](/docs/model_life_cycle.md)
+  * [Model Services](/docs/model_services.md)
+* [Constants](/docs/constants.md)
+* [APIs](/docs/api/README.md)
+  * [Model API](/docs/api/model_api.md)
+  * [Constants API](/docs/api/constants_api.md)
+  * [Test Util API](/docs/api/test_util_api.md)
+
+## Examples
+
 ```js
-{
-  "plugins": [
-    "modulajs"
-  ]
-}
+// counter_model.js
+import { createModel, createConstants } from 'modulajs';
+import PropTypes from 'prop-types';
+
+export const ActionTypes = createConstants('COUNTER', {
+  INCREMENT: null,
+  DECREMENT: null
+});
+
+export const CounterModel = createModel({
+  displayName: 'CounterModel',
+
+  propTypes: {
+    value: PropTypes.number.isRequired
+  },
+
+  defaults: {
+    value: 0
+  },
+
+  sendIncrement() {
+    this.dispatch({ type: ActionTypes.INCREMENT });
+  },
+
+  recvIncrement() {
+    return {
+      type: ActionTypes.INCREMENT,
+      update(model) {
+        const newModel = model.set('value', value => value + 1);
+
+        return [ newModel ];
+      }
+    };
+  },
+
+  sendDecrement() {
+    if (this.get('value') > 0) {
+      this.dispatch({ type: ActionTypes.DECREMENT });
+    }
+  },
+
+  recvDecrement() {
+    return {
+      type: ActionTypes.DECREMENT,
+      update(model) {
+        const newModel = model.set('value', value => value - 1);
+
+        return [ newModel ];
+      }
+    };
+  }
+});
+
+// app.js
+import { createStore } from 'modulajs';
+import { CounterModel } from 'counter_model';
+
+// Create a ModulaJS store to hold state in the decorated model
+const store = createStore(CounterModel);
+
+// Subscribe to store changing, then notify the listeners
+store.subscribe(() => {
+  console.log('Store has changed. The new state is:', store.getState());
+});
+
+// Bootstrap the state tree in root model
+store.getState().sendInit();
+
+// Dispatch an action with a model instance
+// This is the ONLY way to mutate a state in the Store.
+const getCounterModel = () => store.getState().get('decoratedModel');
+
+getCounterModel().sendIncrement();
+getCounterModel().get('value'); // 1
+
+getCounterModel().sendDecrement();
+getCounterModel().get('value'); // 0
 ```
-
-## Rules
-
-### `createmodel-attrs-order` <sub>Stylistic Issues</sub>
-
-This rule enforces the order of the keys in the object that is the argument to `createModel`.
-
-Please go to this link [createmodel-attrs-order](docs/rules/createmodel-attrs-order.md) for more details.
-
-### `gettext-params` <sub>Possible Errors</sub>
-
-This rule validates that the proper arguments are provided to the `gettext` family functions.
-
-Please go to this link [gettext-params](docs/rules/gettext-params.md) for more details.
-
-### `no-mutable-event-types-payload-in-models` <sub>Best Practices</sub>
-this rule forbid mutable objects in eventTypes/watchEventTypes payload defination.
-
-Please go to this link [no-mutable-event-types-payload-in-models](docs/rules/no-mutable-event-types-payload-in-models.md) for more details.
-
-### `no-mutable-prop-types-in-models` <sub>Best Practices</sub>
-
-By default, this rule checks for the following object-types within the `propTypes` definition in `createModel`.
-
-Please go to this link [no-mutable-prop-types-in-models](docs/rules/no-mutable-prop-types-in-models.md) for more details.
-
-### `use-function-in-model-defaults` <sub>Possible Errors</sub>
-
-This rule validates that any non-primitive prop's default value defined in Model `defaults` should be defined with function.
-
-Please go to this link [use-function-in-model-defaults](docs/rules/use-function-in-model-defaults.md) for more details.
 
 ## Contributing
 
@@ -63,6 +128,6 @@ Please read our [contributing guide](CONTRIBUTING.md) for details on how to cont
 
 [Apache-2.0](LICENSE)
 
-[npm-url]: https://www.npmjs.com/package/eslint-plugin-modulajs
-[npm-image]: https://img.shields.io/npm/v/eslint-plugin-modulajs.svg
+[npm-url]: https://www.npmjs.com/package/modulajs
+[npm-image]: https://img.shields.io/npm/v/modulajs.svg
 [apache-2.0]: http://img.shields.io/badge/license-Apache%20V2-blue.svg
