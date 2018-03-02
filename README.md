@@ -40,6 +40,10 @@ npm install --save modulajs
 
 ## Examples
 
+Taking the [*counter example in redux*](https://github.com/reactjs/redux#the-gist), the following code implements a ModulaJS version.
+
+The whole state is stored in Model tree of the single store, and the ONLY way to mutate a state is dispatching an action in [model sender](/docs/model.md). The receiver, which handles the corresponding reaction, usually appear in pair of the sender, in the same Model class.
+
 ```js
 // counter_model.js
 import { createModel, createConstants } from 'modulajs';
@@ -96,7 +100,7 @@ export const CounterModel = createModel({
 
 // app.js
 import { createStore } from 'modulajs';
-import { CounterModel } from 'counter_model';
+import { CounterModel } from './counter_model';
 
 // Create a ModulaJS store to hold state in the decorated model
 const store = createStore(CounterModel);

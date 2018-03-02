@@ -20,9 +20,9 @@ createStore(
 
 ```js
 import { createStore } from 'modulajs';
-import RootModel from './root_model.js';
+import Model from './model.js';
 
-const store = createStore(RootModel);
+const store = createStore(Model);
 
 function handleStoreChanged() {
   console.log("Store has changed. The new state is:", store.getState());
