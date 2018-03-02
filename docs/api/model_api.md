@@ -19,7 +19,6 @@ import { createModel } from 'modulajs';
 createModel({
   displayName,
   propTypes,
-  localPropTypes,
   defaults,
   contextTypes,
   childContextTypes,
@@ -46,7 +45,6 @@ Create and return a new Model of the given options.
 | ----- | ---- | ----------- |
 | displayName | string | A display name of the model that is convenient for debugging and logging |
 | propTypes | object | Shape of the model props, defined by using `PropTypes` or `ImmutablePropTypes` |
-| localPropTypes | object | Shape of the model local props, defined by using `PropTypes` or `ImmutablePropTypes` |
 | defaults | object | Default values of model props |
 | contextTypes | object | Shape of context data that the model requires/consumes |
 | childContextTypes | object | Shape of context data that the model produces; optional |
@@ -193,7 +191,7 @@ alias: 'mutate'
 | key     | string   | the key of an attribute       |
 | value   | any      | the new value of an attribute |
 
-**Returns**: a new model with the updated attribute; returns the old model if no attributes are mutated or only local props are mutated
+**Returns**: a new model with the updated attribute; returns the old model if no attributes are mutated
 
 ### `setMulti({ key1: value1, key2: value2, ... })`
 
@@ -204,7 +202,7 @@ alias: 'mutate'
 | keyN     | string   | the key of an attribute       |
 | valueN   | any      | the new value of an attribute |
 
-**Returns**: a new model with the updated attribute; returns the old model if no attributes are mutated or only local props are mutated
+**Returns**: a new model with the updated attribute; returns the old model if no attributes are mutated
 
 ### `updateIn(path, valueOrMapFunc)`
 
@@ -215,7 +213,7 @@ alias: 'mutate'
 | path | array | an array of strings indicating the position of a nested attribute |
 | valueOrMapFunc | function | the new value of the attribute or the callback function which will be provided the current value of attribute and return an updated value |
 
-**Returns**: a new model with the updated attribute; returns the old model if no attributes are mutated or only local props are mutated
+**Returns**: a new model with the updated attribute; returns the old model if no attributes are mutated
 
 ### `toJS()`
 
