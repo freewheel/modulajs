@@ -32,11 +32,6 @@ function handleStoreChanged() {
 store.subscribe(handleStoreChanged);
 // unsubscribe
 store.unsubscribe(handleStoreChanged);
-
-// dispatch an action
-store.dispatch({
-  type: 'CHANGE_MODEL'
-});
 ```
 
 ## Advanced: Use Store Enhancer (and middleware)
@@ -46,7 +41,6 @@ The third parameter is a store enhancer. You can use `compose` to merge several 
 The following example applies `redux-thunk` and `devToolsExtension` to your store.
 
 ```javascript
-
 import { createStore } from 'modulajs';
 import { applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk'

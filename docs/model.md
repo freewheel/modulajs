@@ -22,6 +22,8 @@ import { createModel } from 'modulajs';
 import PropTypes from 'prop-types';
 
 const TodoModel = createModel({
+  displayName: 'TodoModel',
+
   propTypes: {
     text: PropTypes.string,
     marked: PropTypes.bool.isRequired
@@ -45,6 +47,7 @@ Unlike many other model implementations, in ModulaJS models will refuse to take 
 
 ```js
 const todo = new TodoModel({ text: 'some text', createAt: 1463691281790 });
+
 todo.get('createAt') // undefined
 ```
 
@@ -85,6 +88,8 @@ Please note that any setter function should always return a new instance, just l
 import { createModel, PropTypes } from 'modulajs';
 
 const TodoModel = createModel({
+  displayName: 'TodoModel',
+
   propTypes: {
     text: PropTypes.string,
     marked: PropTypes.bool.isRequired
@@ -106,6 +111,7 @@ const TodoModel = createModel({
 
 const todo = new TodoModel();
 const newTodo = todo.mark();
+
 newTodo.get('marked') // true
 ```
 
@@ -116,6 +122,7 @@ A model comes with a `set` function, with which you can mutate the data in the m
 ```javascript
 const todo = new TodoModel();
 const newTodo = todo.set('marked', true);
+
 newTodo.get('marked') // true
 todo.get('marked') // false
 todo === newTodo // false
@@ -143,6 +150,8 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import TodoModel from './todo_model.js';
 
 const TodosModel = createModel({
+  displayName: 'TodosModel',
+
   propTypes: {
     todos: ImmutablePropTypes.listOf(PropTypes.instanceOf(TodoModel)).isRequired
   },
@@ -185,6 +194,8 @@ In ModulaJS model, a **Context** is a special prop, that is shared with all desc
 
 ```javascript
 const GridModel = createModel({
+  displayName: 'GridModel',
+
   propTypes: {
     table: PropTypes.instanceOf(TableModel)).isRequired
   },
@@ -227,6 +238,8 @@ Sometimes you define some convenient instance methods in a model, then add the m
 
 ```javascript
 const GridModel = createModel({
+  displayName: 'GridModel',
+
   propTypes: {
     table: PropTypes.instanceOf(TableModel)).isRequired
   },

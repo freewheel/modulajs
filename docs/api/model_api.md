@@ -41,6 +41,7 @@ createModel({
 Create and return a new Model of the given options.
 
 **Parameters**
+
 | Param | Type | Description |
 | ----- | ---- | ----------- |
 | displayName | string | A display name of the model that is convenient for debugging and logging |
@@ -58,7 +59,7 @@ Create and return a new Model of the given options.
 | modelDidMount | function | Life cycle hook, will be called when a model is mounted to the model tree |
 | modelDidUpdate | function | Life cycle hook, will be called when a model is updated inside the model tree |
 | modelWillUnmount | function | Life cycle hook, will be called when a model is unmounted from the model tree |
-| [...senderMethods] | function | Senders; functions with "send" prefix, should always dispatch an action by calling `this.dispatch()`; possible to be async operation, recommended to return the `Promise` for better testablity; optional |
+| [...senderMethods] | function | Senders; functions with "send" prefix, should always dispatch an action by calling `this.dispatch()`; possible to be async operation, recommended to return the `Promise` for better testability; optional |
 | [...receiverMethods] | function | Receivers; functions with "recv" prefix, should always return a object: `{type: string, update: function(model, action)}`, the update() function reduces the model; required if there is a corresponding `senderMethods` |
 | [...extraMethods] | function | Extra getter and setter methods to make the model easier to use |
 
@@ -77,6 +78,7 @@ new ModelClass(props);
 ```
 
 **Parameters**
+
 | Param | Type | Description |
 | ----- | ---- | ----------- |
 | props | object | Model props, should align with `propTypes`, will override default value if a key match the one in `defaults`; optional |
@@ -104,6 +106,7 @@ new ModelClass(props);
 ### `bubbleEvent(eventName)`
 
 **Parameters**
+
 | Param      | Type   | Description    |
 | ---------- | ------ | -------------- |
 | eventName  | string | the event name |
@@ -121,6 +124,7 @@ new ModelClass(props);
 ### `dispatch(action)`
 
 **Parameters**
+
 | Param      | Type   | Description                                 |
 | ---------- | ------ | ------------------------------------------- |
 | action     | object | an object describes the intention of change |
@@ -134,6 +138,7 @@ new ModelClass(props);
 ### `get(key)`
 
 **Parameters**
+
 | Param | Type   | Description             |
 | ----- | ------ | ----------------------- |
 | key   | string | the key of an attribute |
@@ -143,6 +148,7 @@ new ModelClass(props);
 ### `getContext(key)`
 
 **Parameters**
+
 | Param | Type   | Description                     |
 | ----- | ------ | ------------------------------- |
 | key   | string | the key of an context attribute |
@@ -154,8 +160,9 @@ new ModelClass(props);
 ### `getIn(path)`
 
 **Parameters**
-| Param | Type   | Description                                                       |
-| ----- | ------ | ----------------------------------------------------------------- |
+
+| Param | Type   | Description |
+| ----- | ------ | ----------- |
 | path  | array  | an array of strings indicating the position of a nested attribute |
 
 **Returns**: the value of the attribute
@@ -163,6 +170,7 @@ new ModelClass(props);
 ### `getService(name)`
 
 **Parameters**
+
 | Param | Type   | Description                     |
 | ----- | ------ | ------------------------------- |
 | name  | string | the name of the service         |
@@ -179,6 +187,7 @@ new ModelClass(props);
 alias: 'mutate'
 
 **Parameters**
+
 | Param   | Type     | Description                   |
 | ------- | -------- | ----------------------------- |
 | key     | string   | the key of an attribute       |
@@ -189,6 +198,7 @@ alias: 'mutate'
 ### `setMulti({ key1: value1, key2: value2, ... })`
 
 **Parameters**
+
 | Param    | Type     | Description                   |
 | -------- | -------- | ----------------------------- |
 | keyN     | string   | the key of an attribute       |
@@ -199,9 +209,10 @@ alias: 'mutate'
 ### `updateIn(path, valueOrMapFunc)`
 
 **Parameters**
-| Param          | Type     | Description                                                                                                                               |
-| -------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| path           | array    | an array of strings indicating the position of a nested attribute                                                                         |
+
+| Param | Type | Description |
+| ----- | -----| ----------- |
+| path | array | an array of strings indicating the position of a nested attribute |
 | valueOrMapFunc | function | the new value of the attribute or the callback function which will be provided the current value of attribute and return an updated value |
 
 **Returns**: a new model with the updated attribute; returns the old model if no attributes are mutated or only local props are mutated

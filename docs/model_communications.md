@@ -12,6 +12,8 @@ We could mutate the child directly, which require the child to provider some mut
 
 ```javascript
 const ParentModel = createModel({
+  displayName: 'ParentModel',
+
   propTypes: {
     content: PropTypes.string,
     child: PropTypes.instanceOf(ChildModel)
@@ -47,6 +49,8 @@ Or we could use SideEffect + Method Delegation to solve the problem.
 
 ```javascript
 const ParentModel = createModel({
+  displayName: 'ParentModel',
+
   propTypes: {
     content: PropTypes.string,
     child: PropTypes.instanceOf(ChildModel)
@@ -96,6 +100,8 @@ Payload can be passed up to those events watchers by setting the second argument
 
 ```javascript
 const ParentModel = createModel({
+  displayName: 'ParentModel',
+
   propTypes: {
     child: PropTypes.instanceOf(ChildModel)).isRequired
   },
@@ -121,6 +127,8 @@ const ParentModel = createModel({
 });
 
 const ChildModel = createModel({
+  displayName: 'ChildModel',
+
   eventTypes: [
     'childUpdated',
     {
@@ -166,6 +174,8 @@ An interesting fact of this life cycle hook is that any time when a child model 
 
 ```javascript
 const ParentModel = createModel({
+  displayName: 'ParentModel',
+
   propTypes: {
     otherAttribute: PropTypes.any,
     child: PropTypes.instanceOf(ChildModel)).isRequired
@@ -217,6 +227,8 @@ const ActionTypes = createConstants('TODO', {
 });
 
 const TodoModel = createModel({
+  displayName: 'TodoModel',
+
   propTypes: {
     todoList: ImmutablePropTypes.listOf(PropTypes.string)
   },
