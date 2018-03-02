@@ -1,0 +1,12 @@
+instrumentation:
+  excludes: ['**/__tests__/**', '**/*constants.js', '**/index.js', '**/message_template.js']
+reporting:
+  print: summary
+  reports:
+    - lcov
+  dir: ./coverage
+  watermarks:
+    statements: [90, 100]
+    lines: [50, 80]
+    functions: [50, 80]
+    branches: [50, 80]
