@@ -1393,9 +1393,9 @@ eslint-plugin-import@^2.8.0:
     minimatch "^3.0.3"
     read-pkg-up "^2.0.0"
 
-eslint-plugin-modulajs@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-modulajs/-/eslint-plugin-modulajs-1.0.0.tgz#270555d61628f8204075f8e7dbee064b2b9aa0ec"
+eslint-plugin-modulajs@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-modulajs/-/eslint-plugin-modulajs-1.1.0.tgz#84a4127a5921ca96dcdc7b7bf562b3f40811d6f8"
   dependencies:
     requireindex "^1.1.0"
 
