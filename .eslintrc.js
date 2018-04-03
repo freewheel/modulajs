@@ -1,5 +1,6 @@
 module.exports = {
   extends: ['airbnb-base'],
+  plugins: ['modulajs', 'import'],
 
   // Stop ESLint from looking for a configuration file in parent folders
   root: true,

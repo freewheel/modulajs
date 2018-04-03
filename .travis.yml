@@ -1,0 +1,26 @@
+language: node_js
+node_js:
+  - '9'
+  - '8'
+  - '7'
+  - '6'
+  - '4'
+script:
+  - 'if [ -n "${LINT-}" ]; then yarn lint ; fi'
+  - 'if [ -n "${TEST-}" ]; then yarn test ; fi'
+  - 'if [ -n "${COVERAGE-}" ]; then yarn test_cov_min; fi'
+env:
+  - TEST=true
+sudo: false
+after_success:
+  - 'if [ -n "${COVERAGE-}" ]; then yarn coveralls ; fi'
+matrix:
+  fast_finish: true
+  include:
+    - node_js: "lts/*"
+      env: COVERAGE=true TEST=false
+    - node_js: "lts/*"
+      env: LINT=true TEST=false
+  allow_failures:
+    - node_js: "9"
+    - node_js: "7"
