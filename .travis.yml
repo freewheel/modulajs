@@ -4,7 +4,6 @@ node_js:
   - '8'
   - '7'
   - '6'
-  - '4'
 script:
   - 'if [ -n "${LINT-}" ]; then yarn lint ; fi'
   - 'if [ -n "${TEST-}" ]; then yarn test ; fi'

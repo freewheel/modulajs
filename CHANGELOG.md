@@ -8,6 +8,10 @@ Placeholder
 
 </details>
 
-## 1.0.0 (TODO, add the date when 1st public)
+## 1.1.0
 
-Initial public release
+Official release of initial version
+
+## 1.0.0
+
+Placeholder release
