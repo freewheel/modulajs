@@ -1,8 +1,8 @@
 {
   "name": "modulajs",
-  "version": "1.1.0-rc.3",
+  "version": "1.1.0",
   "description": "A modularization framework to manage application states using an immutable model tree",
-  "main": "index.js",
+  "main": "lib/index.js",
   "author": "eng-ui@freewheel.tv",
   "license": "Apache-2.0",
   "files": [
@@ -20,13 +20,13 @@
     "test_cov_min": "npm run test_cov -- --report lcovonly -- --reporter min",
     "test_one": "cross-env NODE_ENV=test mocha --require babel-register"
   },
-  "homepage": "https://github.com/Comcast/modulajs",
+  "homepage": "https://github.com/freewheel/modulajs",
   "bugs": {
-    "url": "https://github.com/Comcast/modulajs/issues"
+    "url": "https://github.com/freewheel/modulajs/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Comcast/modulajs.git"
+    "url": "git+https://github.com/freewheel/modulajs.git"
   },
   "keywords": [
     "modula",

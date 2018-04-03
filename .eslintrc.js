@@ -25,7 +25,7 @@ module.exports = {
         props: true,
         ignorePropertyModificationsFor: [
           'memo', // for reduce accumulators
-          'model', // for modula model
+          'model', // for ModulaJS model
           'target', // for decorators
           'e' // for e.returnvalue
         ]

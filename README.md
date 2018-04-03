@@ -1,6 +1,9 @@
 # ModulaJS
 
 [![NPM version][npm-image]][npm-url]
+[![Build Status][travis-image]][travis-url]
+[![Coverage Status][coverage-image]][coverage-url]
+[![Node version][node-image]][node-url]
 [![Apache V2 License][apache-2.0]](LICENSE)
 
 ModulaJS is created to provide an intuitive and simple way of manage complex state. It introduces Model (an immutable tree) to represent the application state tree. Both actions and reactions are handled inside Model, as well as the communications and side effects. It makes the components in view layer very simple, pure and stateless.
@@ -134,4 +137,14 @@ Please read our [contributing guide](CONTRIBUTING.md) for details on how to cont
 
 [npm-url]: https://www.npmjs.com/package/modulajs
 [npm-image]: https://img.shields.io/npm/v/modulajs.svg
+
+[travis-url]: https://travis-ci.org/freewheel/modulajs
+[travis-image]: https://img.shields.io/travis/freewheel/modulajs/master.svg
+
+[coverage-url]: https://coveralls.io/github/freewheel/modulajs
+[coverage-image]: https://img.shields.io/coveralls/freewheel/modulajs/master.svg
+
+[node-url]: https://nodejs.org
+[node-image]: https://img.shields.io/node/v/webpack.svg
+
 [apache-2.0]: http://img.shields.io/badge/license-Apache%20V2-blue.svg
