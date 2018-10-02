@@ -1,27 +1,5 @@
-# Logs
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# Runtime data
-pids
-*.pid
-*.seed
-*.pid.lock
-
-# Dependency directories
+yarn-error.log
+lerna-debug.log
 node_modules/
-
-# dotenv environment variables file
-.env
-
-# coverage
-/coverage
-
-# lib
-/lib
-
-# others
-.DS_Store
+dist/
+.cache/

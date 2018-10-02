@@ -1,80 +1,32 @@
 {
-  "name": "modulajs",
-  "version": "1.1.0",
-  "description": "A modularization framework to manage application states using an immutable model tree",
-  "main": "lib/index.js",
-  "author": "eng-ui@freewheel.tv",
-  "license": "Apache-2.0",
-  "files": [
-    "lib"
-  ],
+  "name": "modula-next",
+  "version": "1.0.0",
+  "description": "Explore how next modula could look like",
   "scripts": {
-    "build": "rimraf lib && babel src --ignore **/__tests__/** --out-dir lib",
-    "coveralls": "cat ./coverage/lcov.info | coveralls",
-    "lint": "eslint --cache --cache-location node_modules/.cache --ext js .",
-    "lint_one": "eslint",
-    "precommit": "lint-staged",
-    "prepublish": "in-publish && npm run build || not-in-publish",
-    "test": "npm run test_one './src/**/__tests__/*.*'",
-    "test_cov": "rimraf coverage && cross-env NODE_ENV=test babel-node node_modules/.bin/babel-istanbul cover node_modules/.bin/_mocha './src/**/__tests__/*.*'",
-    "test_cov_min": "npm run test_cov -- --report lcovonly -- --reporter min",
-    "test_one": "cross-env NODE_ENV=test mocha --require babel-register"
-  },
-  "homepage": "https://github.com/freewheel/modulajs",
-  "bugs": {
-    "url": "https://github.com/freewheel/modulajs/issues"
+    "bootstrap": "lerna bootstrap",
+    "start": "lerna run --parallel start",
+    "dev": "yarn build && yarn watch",
+    "watch": "lerna run --parallel watch",
+    "lint": "lerna run --stream lint",
+    "test": "lerna run --stream test",
+    "build": "lerna run --stream build",
+    "format": "lerna run --stream format",
+    "pipeline": "lerna run --stream pipeline",
+    "clean": "lerna run clean && lerna clean"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/freewheel/modulajs.git"
+    "url": "git@git.dev.fwmrm.net:BenCao/modula-next.git"
   },
   "keywords": [
     "modula",
-    "modularization",
-    "modulajs",
-    "application-state",
-    "state-management",
-    "immutable",
-    "model",
-    "store",
-    "dispatcher",
-    "reducer"
+    "next"
   ],
-  "lint-staged": {
-    "*.js": "lint_one"
-  },
-  "engines": {
-    "node": ">=6.0"
-  },
-  "dependencies": {
-    "immutable": "^3.8.2",
-    "lodash": "^4.17.4",
-    "prop-types": "^15.6.0",
-    "react-immutable-proptypes": "^2.1.0",
-    "redux": "^3.7.2"
-  },
+  "author": "Ben Cao",
+  "license": "MIT",
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.0",
-    "babel-eslint": "^8.2.2",
-    "babel-istanbul": "^0.12.2",
-    "babel-plugin-transform-decorators-legacy": "^1.3.4",
-    "babel-preset-es2015": "^6.24.1",
-    "babel-preset-stage-0": "^6.24.1",
-    "babel-register": "^6.26.0",
-    "chai": "^4.1.2",
-    "coveralls": "^3.0.0",
-    "cross-env": "^5.1.4",
-    "eslint": "^4.13.1",
-    "eslint-config-airbnb-base": "^12.1.0",
-    "eslint-plugin-import": "^2.8.0",
-    "eslint-plugin-modulajs": "^1.1.0",
-    "husky": "^0.14.3",
-    "in-publish": "^2.0.0",
-    "lint-staged": "^6.0.0",
-    "mocha": "^4.0.1",
-    "proxyquire": "^1.8.0",
-    "rimraf": "^2.6.2",
-    "sinon": "^4.1.3"
-  }
+    "lerna": "^2.9.0",
+    "prettier": "^1.11.1"
+  },
+  "dependencies": {}
 }
