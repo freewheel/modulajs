@@ -5,6 +5,7 @@
   "main": "lib/index.js",
   "scripts": {
     "start": "parcel src/index.html",
+    "build": "parcel build src/index.html",
     "watch": "parcel src/index.html",
     "lint": "eslint --cache --cache-location node_modules/.cache --ext js,jsx src",
     "clean": "rimraf dist/",
