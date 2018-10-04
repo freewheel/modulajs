@@ -38,6 +38,11 @@ const ContainerTitle = styled.h4`
   flex-grow: 0;
 `;
 
+const ContainerTitleLink = styled.a`
+  display: block;
+  margin-bottom: 1em;
+`;
+
 const ContainerContent = styled.div`
   border-left: 1px solid #aaa;
   padding: 2em;
@@ -104,12 +109,13 @@ export default function renderExample({
     ReactDOM.render(
       <Container>
         <ContainerTitle>
-          <a
+          <ContainerTitleLink
             href={`/${encodeURI(title)}`}
             title="see it in a separate page, which shows more information including source code"
           >
             {title}
-          </a>
+          </ContainerTitleLink>
+          {shouldRenderOne(title) && <ContainerTitleLink href="/">Go Back</ContainerTitleLink>}
         </ContainerTitle>
         <ContainerContent>
           <Example />
