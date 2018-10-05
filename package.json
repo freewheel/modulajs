@@ -25,8 +25,15 @@
   "author": "Ben Cao",
   "license": "MIT",
   "devDependencies": {
-    "lerna": "^2.9.0",
+    "lerna": "^2.11.0",
     "prettier": "^1.11.1"
   },
-  "dependencies": {}
+  "dependencies": {
+    "babel": "^6.23.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-export-default": "^7.0.0-alpha.20",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-flow": "^6.23.0",
+    "parcel": "^1.10.1"
+  }
 }

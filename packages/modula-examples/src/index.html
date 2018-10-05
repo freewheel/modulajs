@@ -16,15 +16,42 @@
       #banner h4 {
         color: #eee;
       }
+      #sidebar {
+        background: #aaa2;
+        height: 100%;
+      }
+      #sidebar a {
+        font-size: .8em;
+      }
+      div.container {
+        max-width: 100%;
+        position: fixed;
+        height: 100%;
+      }
+      #content {
+        overflow-y: scroll;
+        height: 100%;
+        padding: 0em;
+      }
+      .nav-item {
+        text-align: right;
+      }
     </style>
 	</head>
 	<body>
-    <a href="https://github.com/freewheel/modulajs"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
-    <section id="banner">
-      <h1><a href="/">Modulajs</a></h1>
-      <h4>simple intuitive state management framework</h4>
-    </section>
-		<div id="spa"></div>
+    <div class="container">
+      <div class="columns gapless">
+        <div id="sidebar" class="column hide-xs col-3"></div>
+        <div id="content" class="column col-9">
+          <a href="https://github.com/freewheel/modulajs"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+          <section id="banner">
+            <h1><a href="/">Modulajs</a></h1>
+            <h4>simple intuitive state management framework</h4>
+          </section>
+          <div id="spa"></div>
+        </div>
+      </div>
+    </div>
 		<script src="./index.js"></script>
 	</body>
 </html>

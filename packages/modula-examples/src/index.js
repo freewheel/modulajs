@@ -1,5 +1,6 @@
-import { forEach } from 'ramda';
-import renderExample from './render_example';
+
+import renderNav from './render_nav';
+import renderExamples from './render_example';
 
 import Example00 from './00_create_model';
 import Example01 from './01_counter';
@@ -25,4 +26,5 @@ const examples = [
   Example09
 ];
 
-forEach(renderExample, examples);
+renderNav(examples);
+renderExamples(examples);

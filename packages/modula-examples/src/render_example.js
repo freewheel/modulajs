@@ -1,58 +1,135 @@
-/* eslint-env browser */
 import React from 'react';
+
+/* eslint-env browser */
 import ReactDOM from 'react-dom';
-import { find, propEq, pipe, toPairs, map } from 'ramda';
-import { createStore } from 'modula';
+import { pipe, toPairs, map } from 'ramda';
+import { createStore, Model as ModulaModel } from 'modula';
 import { createContainer } from 'modula-react';
+
 import styled from 'styled-components';
 import SyntaxHighlighter from 'react-syntax-highlighter/prism';
 import { tomorrow } from 'react-syntax-highlighter/styles/prism';
 
-function findOrCreate(exampleName) {
-  function create(className) {
-    const node = document.createElement('div');
+const ActionTypes = {
+  DISPLAY_CHANGE: 'EXAMPLE_DISPLAY_CHANGE'
+};
 
-    node.className = className;
+const DISPLAY = {
+  EXAMPLE: 0,
+  COMPONENT: 1,
+  MODEL: 2
+};
 
-    return node;
+const createExampleModel = ({ Model, title, sources }) => {
+  class ExampleModel extends ModulaModel {
+    sendDisplayChange(value) {
+      this.dispatch({ 
+        type: ActionTypes.DISPLAY_CHANGE,
+        payload: { value }
+    });
+    }
+
+    recvDisplayChange() {
+      return {
+        type: ActionTypes.DISPLAY_CHANGE,
+        update(model, action) {
+          const { value } = action.payload;
+          const newModel = model.set('display', value);
+          return [newModel];
+        }
+      };
+    }
   }
 
-  const spaNode = document.getElementById('spa');
+  ExampleModel.defaultProps = {
+    decoratedModel: () => new Model(),
+    title,
+    sources,
+    display: DISPLAY.EXAMPLE
+  };
+  ExampleModel.actionTypes = ActionTypes;
 
-  let node = find(propEq('className', exampleName))(spaNode.childNodes);
+  return ExampleModel;
+};
 
-  if (node) {
-    return node;
-  } else {
-    node = create(exampleName);
-    spaNode.appendChild(node);
+const createExampleComponent = Component => ({ model }) => {
+  const id = model.get('title').replace(/ /g,'-').toLowerCase();
+  return (
+    <Container key={id} id={id}>
+      <ContainerTitle>
+        <ContainerTitleLink
+          href={`#${id}`}
+          title="see it in a separate page, which shows more information including source code"
+        >
+          {model.get('title')}
+        </ContainerTitleLink>
+      </ContainerTitle>
+      <ContainerDescription>
+        This will be the example description which will be available in the example model. The model can either be used as a function or extended from the base class.
+      </ContainerDescription>
+      <ContainerContent>
+        <Tabs display={model.get('display')} onDisplayChange={model.sendDisplayChange} />
+        <Component model={model.get('decoratedModel')} />
+        <CodeArea sources={model.get('sources')} />
+      </ContainerContent>
+    </Container>
+  );
+};
 
-    return node;
-  }
+function Tabs({ display, onDisplayChange }){
+  return (
+    <ul className="tab tab-block">
+      <li 
+        className={(DISPLAY.EXAMPLE === display) ? 'tab-item active' : 'tab-item'}
+      >
+        <a 
+          href="/#" 
+          className={(DISPLAY.EXAMPLE === display) ? 'active' : ''}
+          onClick={() => onDisplayChange(DISPLAY.EXAMPLE)}
+        >
+          Example
+        </a>
+      </li>
+      <li 
+        className={(DISPLAY.COMPONENT === display) ? 'tab-item active' : 'tab-item'}
+      >
+        <a 
+          href="/#" 
+          className={(DISPLAY.COMPONENT === display) ? 'active' : ''}
+          onClick={() => onDisplayChange(DISPLAY.COMPONENT)}
+        >
+          Component
+        </a>
+      </li>
+      <li 
+        className={(DISPLAY.MODEL === display) ? 'tab-item active' : 'tab-item'}
+      >
+        <a 
+          href="/#" 
+          className={(DISPLAY.MODEL === display) ? 'active' : ''}
+          onClick={() => onDisplayChange(DISPLAY.MODEL)}
+        >
+          Model
+        </a>
+      </li>
+    </ul>
+  );
 }
 
-const ContainerTitle = styled.h4`
-  width: 12em;
-  padding: 2em;
-  text-align: right;
-  flex-grow: 0;
-`;
-
-const ContainerTitleLink = styled.a`
-  display: block;
-  margin-bottom: 1em;
-`;
-
-const ContainerContent = styled.div`
-  border-left: 1px solid #aaa;
-  padding: 2em;
-`;
-
 const Container = styled.section`
-  margin-bottom: 2em;
-  display: flex;
-  flex-direction: row;
+  margin: 1em 0 2em 1em;
 `;
+
+const ContainerTitle = styled.h4``;
+
+const ContainerTitleLink = styled.a``;
+
+const ContainerDescription = styled.p`
+  padding: 0em 4em 0em 4em;
+  font-size: .9em;
+`;
+
+const ContainerContent = styled.div``;
 
 const SourceCode = styled.dl`
   padding-top: 20px;
@@ -83,46 +160,23 @@ function CodeArea({ sources }) {
   )(sources);
 }
 
-function shouldRenderAll() {
-  const { pathname } = window.location;
+export default function renderExamples(examples) {
+  const exampleComponents = examples.map(example => {
+    const { Model, Component, title, sources } = example;
 
-  return pathname === '/';
-}
+    const ExampleModel = createExampleModel({ Model, title, sources });
+    const ExampleComponent = createExampleComponent(Component);
 
-function shouldRenderOne(title) {
-  const { pathname } = window.location;
+    const store = createStore(ExampleModel);
+    const Example = createContainer(store, ExampleComponent);
 
-  return decodeURI(pathname) === `/${title}`;
-}
+    return <Example />;
+  });
 
-export default function renderExample({
-  title,
-  Model,
-  Component,
-  sources = []
-}) {
-  if (shouldRenderAll() || shouldRenderOne(title)) {
-    const store = createStore(Model);
-
-    const Example = createContainer(store, Component);
-
-    ReactDOM.render(
-      <Container>
-        <ContainerTitle>
-          <ContainerTitleLink
-            href={`/${encodeURI(title)}`}
-            title="see it in a separate page, which shows more information including source code"
-          >
-            {title}
-          </ContainerTitleLink>
-          {shouldRenderOne(title) && <ContainerTitleLink href="/">Go Back</ContainerTitleLink>}
-        </ContainerTitle>
-        <ContainerContent>
-          <Example />
-          {shouldRenderOne(title) && <CodeArea sources={sources} />}
-        </ContainerContent>
-      </Container>,
-      findOrCreate(title)
-    );
-  }
+  ReactDOM.render(
+    <span>
+      {exampleComponents}
+    </span>,
+    document.getElementById('spa')
+  );
 }
