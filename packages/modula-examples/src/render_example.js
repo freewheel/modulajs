@@ -2,7 +2,6 @@ import React from 'react';
 
 /* eslint-env browser */
 import ReactDOM from 'react-dom';
-import { pipe, toPairs, map } from 'ramda';
 import { createStore, Model as ModulaModel } from 'modula';
 import { createContainer } from 'modula-react';
 
@@ -12,12 +11,6 @@ import { tomorrow } from 'react-syntax-highlighter/styles/prism';
 
 const ActionTypes = {
   DISPLAY_CHANGE: 'EXAMPLE_DISPLAY_CHANGE'
-};
-
-const DISPLAY = {
-  EXAMPLE: 0,
-  COMPONENT: 1,
-  MODEL: 2
 };
 
 const createExampleModel = ({ Model, title, sources }) => {
@@ -45,7 +38,7 @@ const createExampleModel = ({ Model, title, sources }) => {
     decoratedModel: () => new Model(),
     title,
     sources,
-    display: DISPLAY.EXAMPLE
+    display: 0
   };
   ExampleModel.actionTypes = ActionTypes;
 
@@ -55,69 +48,64 @@ const createExampleModel = ({ Model, title, sources }) => {
 const createExampleComponent = Component => ({ model }) => {
   const id = model.get('title').replace(/ /g,'-').toLowerCase();
   return (
-    <Container key={id} id={id}>
-      <ContainerTitle>
-        <ContainerTitleLink
-          href={`#${id}`}
-          title="see it in a separate page, which shows more information including source code"
-        >
-          {model.get('title')}
-        </ContainerTitleLink>
-      </ContainerTitle>
-      <ContainerDescription>
-        This will be the example description which will be available in the example model. The model can either be used as a function or extended from the base class.
-      </ContainerDescription>
-      <ContainerContent>
-        <Tabs display={model.get('display')} onDisplayChange={model.sendDisplayChange} />
+    <Container key={id} id={id} className='columns'>
+      <div className='column col-6'>
+        <ContainerTitle>
+          <ContainerTitleLink
+            href={`#${id}`}
+            title="see it in a separate page, which shows more information including source code"
+          >
+            {model.get('title')}
+          </ContainerTitleLink>
+        </ContainerTitle>
+        <ContainerDescription>
+          This will be the example description which will be available in the example model. The model can either be used as a function or extended from the base class.
+        </ContainerDescription>
         <Component model={model.get('decoratedModel')} />
-        <CodeArea sources={model.get('sources')} />
-      </ContainerContent>
+      </div>
+      <div className='column col-6'>
+        <Tabs sources={model.get('sources')} display={model.get('display')} onDisplayChange={model.sendDisplayChange} />
+        <CodeArea sources={model.get('sources')} display={model.get('display')} />
+      </div>
     </Container>
   );
 };
 
-function Tabs({ display, onDisplayChange }){
+function Tab({index, title, display, onDisplayChange}){
+  return (
+    <li 
+      className={(index === display) ? 'tab-item active' : 'tab-item'}
+      key={index}
+    >
+      <a 
+        href="/#" 
+        className={(index === display) ? 'active' : ''}
+        onClick={() => onDisplayChange(index)}
+      >
+        {title}
+      </a>
+    </li>
+  )
+}
+
+function Tabs({ sources, display, onDisplayChange }){
+  const tabs = Object.keys(sources).map((key, index) => (
+    <Tab 
+      index={index} 
+      title={key} 
+      display={display} 
+      onDisplayChange={onDisplayChange} 
+    />)
+  );
   return (
     <ul className="tab tab-block">
-      <li 
-        className={(DISPLAY.EXAMPLE === display) ? 'tab-item active' : 'tab-item'}
-      >
-        <a 
-          href="/#" 
-          className={(DISPLAY.EXAMPLE === display) ? 'active' : ''}
-          onClick={() => onDisplayChange(DISPLAY.EXAMPLE)}
-        >
-          Example
-        </a>
-      </li>
-      <li 
-        className={(DISPLAY.COMPONENT === display) ? 'tab-item active' : 'tab-item'}
-      >
-        <a 
-          href="/#" 
-          className={(DISPLAY.COMPONENT === display) ? 'active' : ''}
-          onClick={() => onDisplayChange(DISPLAY.COMPONENT)}
-        >
-          Component
-        </a>
-      </li>
-      <li 
-        className={(DISPLAY.MODEL === display) ? 'tab-item active' : 'tab-item'}
-      >
-        <a 
-          href="/#" 
-          className={(DISPLAY.MODEL === display) ? 'active' : ''}
-          onClick={() => onDisplayChange(DISPLAY.MODEL)}
-        >
-          Model
-        </a>
-      </li>
+      {tabs}
     </ul>
   );
 }
 
 const Container = styled.section`
-  margin: 1em 0 2em 1em;
+  margin: 1em 0 2em 0em;
 `;
 
 const ContainerTitle = styled.h4``;
@@ -129,35 +117,28 @@ const ContainerDescription = styled.p`
   font-size: .9em;
 `;
 
-const ContainerContent = styled.div``;
-
 const SourceCode = styled.dl`
   padding-top: 20px;
 `;
 
-const SourceCodeTitle = styled.dt`
-  font-weight: bold;
-  margin-bottom: 8px;
-`;
-
 const SourceCodeBody = styled.dd`
   margin: 0;
+  font-size: .8em;
 `;
 
-function CodeArea({ sources }) {
-  return pipe(
-    toPairs,
-    map(([fileName, fileContent]) => (
-      <SourceCode key={fileName}>
-        <SourceCodeTitle>{fileName}</SourceCodeTitle>
-        <SourceCodeBody>
-          <SyntaxHighlighter language="javascript" style={tomorrow}>
-            {fileContent}
-          </SyntaxHighlighter>
-        </SourceCodeBody>
-      </SourceCode>
-    ))
-  )(sources);
+function CodeArea({ sources, display }) {
+  const key = Object.keys(sources)[display];
+  const fileName = sources[key];
+  const fileContent = sources[key];
+  return (
+    <SourceCode key={fileName}>
+      <SourceCodeBody>
+        <SyntaxHighlighter language="javascript" style={tomorrow}>
+          {fileContent}
+        </SyntaxHighlighter>
+      </SourceCodeBody>
+    </SourceCode>
+  );
 }
 
 export default function renderExamples(examples) {
