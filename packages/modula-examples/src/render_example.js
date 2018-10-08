@@ -131,6 +131,7 @@ function Tabs({ sources, display, onDisplayChange }){
   const tabs = Object.keys(sources).map((key, index) => (
     <Tab 
       index={index} 
+      key={key}
       title={key} 
       display={display} 
       onDisplayChange={onDisplayChange} 
@@ -177,7 +178,7 @@ export default function renderExamples(examples) {
     const store = createStore(ExampleModel);
     const Example = createContainer(store, ExampleComponent);
 
-    return <Example />;
+    return <Example key={title} />;
   });
 
   ReactDOM.render(
