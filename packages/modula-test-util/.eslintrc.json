@@ -1,0 +1,17 @@
+{
+  "env": {
+    "mocha": true
+  },
+  "parser": "babel-eslint",
+  "extends": ["airbnb", "prettier"],
+  "plugins": ["chai-friendly"],
+  "rules": {
+    "chai-friendly/no-unused-expressions": "error",
+    "class-methods-use-this": "off",
+    "no-else-return": "off",
+    "no-param-reassign": "warn",
+    "no-prototype-builtins": "off",
+    "no-underscore-dangle": "off",
+    "no-unused-expressions": "off"
+  }
+}

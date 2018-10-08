@@ -1,0 +1,23 @@
+stages:
+  - build
+  - test
+
+lint:
+  stage: build
+  tags:
+    - nodejs
+    - yarn
+  script:
+    - yarn install
+    - yarn bootstrap
+    - yarn lint
+
+test:
+  stage: test
+  tags:
+    - nodejs
+    - yarn
+  script:
+    - yarn install
+    - yarn bootstrap
+    - yarn test
