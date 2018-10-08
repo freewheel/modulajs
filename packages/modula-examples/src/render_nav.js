@@ -7,7 +7,7 @@ function renderLi(exampleTitle){
 
   return (
     <li className="nav-item" key={exampleLink}>
-      <a href={`#${exampleLink}`}>{exampleTitle}</a>
+      <a href={`#${exampleLink}`} id={`${exampleLink}-link`}>{exampleTitle}</a>
     </li>
   )
 }

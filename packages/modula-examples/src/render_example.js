@@ -19,7 +19,7 @@ const createExampleModel = ({ Model, title, sources, description }) => {
       this.dispatch({ 
         type: ActionTypes.DISPLAY_CHANGE,
         payload: { value }
-    });
+      });
     }
 
     recvDisplayChange() {
@@ -31,6 +31,14 @@ const createExampleModel = ({ Model, title, sources, description }) => {
           return [newModel];
         }
       };
+    }
+
+    sendMouseOver() {
+      // TODO: this model should be the child of a Page model, which also contains the nav model
+      // and retains the current focus id in it's context
+      const exampleLinkId = `#${this.get('title').replace(/ /g,'-').toLowerCase()}-link`;
+      $('.nav-item a').removeClass('hover'); 
+      $(exampleLinkId).addClass('hover');
     }
   }
 
@@ -64,7 +72,13 @@ const ContainerDescription = styled.p`
 const createExampleComponent = Component => ({ model }) => {
   const id = model.get('title').replace(/ /g,'-').toLowerCase();
   return (
-    <Container key={id} id={id} className='columns'>
+    <Container 
+      key={id} 
+      id={id} 
+      className='columns' 
+      onMouseOver={() => model.sendMouseOver()}
+      onFocus={() => model.sendMouseOver()}
+    >
       <div className='column col-md-12 col-6'>
         <ContainerTitle>
           <ContainerTitleLink

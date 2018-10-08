@@ -1,12 +1,31 @@
 <html>
 	<head>
     <title>Modulajs</title>
-		<link rel="stylesheet" href="./spectre.css">
+    <link rel="icon" href="./favicon.ico" />
+		<link rel="stylesheet" href="./spectre.css" />
     <style>
+      /* general */
+      a:focus {
+        box-shadow: none;
+      }
+
       /* sidebar */
       #sidebar {
         background: #aaa2;
         height: 100%;
+      }
+      #sidebar .logo {
+        width: 100%;
+        height: 60px;
+        text-align: center;
+        padding: 24px 0;
+        font-weight: bold;
+        color: #5755d9;
+        text-transform: uppercase;
+        top: 0px;
+        left: 0px;
+      }
+      #sidebar .nav.main {
         padding-left: 1em;
       }
       #sidebar .nav .nav-item a {
@@ -16,15 +35,19 @@
         text-indent: 0em;
         font-size: .8em;
       }
-      a:focus {
-        box-shadow: none;
+      #sidebar .nav .nav-item a:hover {
+        color: #5755d9;
+      }
+      #sidebar .nav .nav-item a.hover {
+        font-weight: bold;
+        color: #5755d9;
       }
 
       /* banner */
       #banner {
-        background: #5755d9;
         text-align: center;
         padding: 3em 0;
+        background: linear-gradient(234deg, #04034d, #2f2da0, #04034d);
       }
       #banner h1 a, #banner h1 a:visited {
         font-size: 1em;
@@ -86,7 +109,10 @@
     <div class="container">
       <div class="columns gapless">
         <div id="sidebar" class="column hide-md col-2">
-          <ul class="nav">
+          <div class="logo">
+            Modulajs
+          </div>
+          <ul class="nav main">
             <li class="nav-item">
               <a>Examples</a>
               <ul class="nav" id="nav-examples"></ul>
@@ -94,7 +120,7 @@
           </ul>
         </div>
         <div id="content" class="column col-md-12 col-10">
-          <a href="https://github.com/freewheel/modulajs"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+          <a href="https://github.com/freewheel/modulajs"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png" alt="Fork me on GitHub"></a>
           <section id="banner">
             <h1><a href="/">Modulajs</a></h1>
             <h4>a simple, intuitive state management framework</h4>
@@ -103,6 +129,10 @@
         </div>
       </div>
     </div>
-		<script src="./index.js"></script>
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.min.js"
+      integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+      crossorigin="anonymous"></script>
+    <script src="./index.js"></script>
 	</body>
 </html>
