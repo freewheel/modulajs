@@ -56,9 +56,9 @@ const CounterListComponent = ({ model }) => {
     <div>
       <div>
         {model.get('counters').map(counterModel => (
-          <p key={counterModel.get('name')}>
+          <div key={counterModel.get('name')}>
             <CounterComponent model={counterModel} />
-          </p>
+          </div>
         ))}
       </div>
       <button
