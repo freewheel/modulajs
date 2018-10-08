@@ -5,7 +5,6 @@ import ReactDOM from 'react-dom';
 import { createStore, Model as ModulaModel } from 'modula';
 import { createContainer } from 'modula-react';
 
-import styled from 'styled-components';
 import SyntaxHighlighter from 'react-syntax-highlighter/prism';
 import { tomorrow } from 'react-syntax-highlighter/styles/prism';
 
@@ -59,25 +58,10 @@ const createExampleModel = ({ Model, title, sources, description }) => {
   return ExampleModel;
 };
 
-const Container = styled.section`
-  margin: 0;
-`;
-
-const ContainerTitle = styled.h4`
-  padding: 1em;
-`;
-
-const ContainerTitleLink = styled.a``;
-
-const ContainerDescription = styled.p`
-  padding: 0em 4em 0em 4em;
-  font-size: .9em;
-`;
-
 const createExampleComponent = Component => ({ model }) => {
   const id = model.get('title').replace(/ /g,'-').toLowerCase();
   return (
-    <Container 
+    <section 
       key={id} 
       id={id} 
       className='columns' 
@@ -86,18 +70,18 @@ const createExampleComponent = Component => ({ model }) => {
       onMouseOut={() => model.sendMouseOut()}
       onBlur={() => model.sendMouseOut()}
     >
-      <div className='column col-md-12 col-6'>
-        <ContainerTitle>
-          <ContainerTitleLink
+      <div className='column col-md-12 col-6 left'>
+        <h4>
+          <a
             href={`#${id}`}
             title="see it in a separate page, which shows more information including source code"
           >
             {model.get('title')}
-          </ContainerTitleLink>
-        </ContainerTitle>
-        <ContainerDescription>
+          </a>
+        </h4>
+        <p>
           {model.get('description')}
-        </ContainerDescription>
+        </p>
         <div className='example'>
           <Component model={model.get('decoratedModel')} />
         </div>
@@ -106,7 +90,7 @@ const createExampleComponent = Component => ({ model }) => {
         <Tabs sources={model.get('sources')} display={model.get('display')} onDisplayChange={model.sendDisplayChange} />
         <CodeArea sources={model.get('sources')} display={model.get('display')} />
       </div>
-    </Container>
+    </section>
   );
 };
 
@@ -144,27 +128,18 @@ function Tabs({ sources, display, onDisplayChange }){
   );
 }
 
-const SourceCode = styled.dl`
-  padding-top: 20px;
-`;
-
-const SourceCodeBody = styled.dd`
-  margin: 0;
-  font-size: .8em;
-`;
-
 function CodeArea({ sources, display }) {
   const key = Object.keys(sources)[display];
   const fileName = sources[key];
   const fileContent = sources[key];
   return (
-    <SourceCode key={fileName}>
-      <SourceCodeBody>
+    <dl key={fileName}>
+      <dd>
         <SyntaxHighlighter language="javascript" style={tomorrow}>
           {fileContent}
         </SyntaxHighlighter>
-      </SourceCodeBody>
-    </SourceCode>
+      </dd>
+    </dl>
   );
 }
 

@@ -2,7 +2,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-function renderLi(exampleTitle){
+function renderExampleLink(exampleTitle){
   const exampleLink = exampleTitle.replace(/ /g,'-').toLowerCase();
 
   return (
@@ -12,12 +12,12 @@ function renderLi(exampleTitle){
   )
 }
 
-function renderUl(examples) {
+function renderExampleLinkList(examples) {
   return examples.map(example => (
-    renderLi(example.title)
+    renderExampleLink(example.title)
   ));
 }
 
 export default function renderNav(examples) {
-  ReactDOM.render(renderUl(examples), document.getElementById('nav-examples'));
+  ReactDOM.render(renderExampleLinkList(examples), document.getElementById('nav-examples'));
 }
