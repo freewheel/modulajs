@@ -13,17 +13,11 @@ function renderLi(exampleTitle){
 }
 
 function renderUl(examples) {
-  const ul = [];
-  examples.forEach(example => {
-    ul.push(renderLi(example.title));
-  });
-  return (
-    <ul className='nav'>
-      {ul}
-    </ul>
-  );
+  return examples.map(example => (
+    renderLi(example.title)
+  ));
 }
 
 export default function renderNav(examples) {
-  ReactDOM.render(renderUl(examples), document.getElementById('sidebar'));
+  ReactDOM.render(renderUl(examples), document.getElementById('nav-examples'));
 }

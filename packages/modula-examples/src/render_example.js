@@ -13,7 +13,7 @@ const ActionTypes = {
   DISPLAY_CHANGE: 'EXAMPLE_DISPLAY_CHANGE'
 };
 
-const createExampleModel = ({ Model, title, sources }) => {
+const createExampleModel = ({ Model, title, sources, description }) => {
   class ExampleModel extends ModulaModel {
     sendDisplayChange(value) {
       this.dispatch({ 
@@ -37,6 +37,7 @@ const createExampleModel = ({ Model, title, sources }) => {
   ExampleModel.defaultProps = {
     decoratedModel: () => new Model(),
     title,
+    description,
     sources,
     display: 0
   };
@@ -45,11 +46,26 @@ const createExampleModel = ({ Model, title, sources }) => {
   return ExampleModel;
 };
 
+const Container = styled.section`
+  margin: 0;
+`;
+
+const ContainerTitle = styled.h4`
+  padding: 1em;
+`;
+
+const ContainerTitleLink = styled.a``;
+
+const ContainerDescription = styled.p`
+  padding: 0em 4em 0em 4em;
+  font-size: .9em;
+`;
+
 const createExampleComponent = Component => ({ model }) => {
   const id = model.get('title').replace(/ /g,'-').toLowerCase();
   return (
     <Container key={id} id={id} className='columns'>
-      <div className='column col-6'>
+      <div className='column col-md-12 col-6'>
         <ContainerTitle>
           <ContainerTitleLink
             href={`#${id}`}
@@ -59,11 +75,13 @@ const createExampleComponent = Component => ({ model }) => {
           </ContainerTitleLink>
         </ContainerTitle>
         <ContainerDescription>
-          This will be the example description which will be available in the example model. The model can either be used as a function or extended from the base class.
+          {model.get('description')}
         </ContainerDescription>
-        <Component model={model.get('decoratedModel')} />
+        <div className='example'>
+          <Component model={model.get('decoratedModel')} />
+        </div>
       </div>
-      <div className='column col-6'>
+      <div className='column col-md-12 col-6 right'>
         <Tabs sources={model.get('sources')} display={model.get('display')} onDisplayChange={model.sendDisplayChange} />
         <CodeArea sources={model.get('sources')} display={model.get('display')} />
       </div>
@@ -104,19 +122,6 @@ function Tabs({ sources, display, onDisplayChange }){
   );
 }
 
-const Container = styled.section`
-  margin: 1em 0 2em 0em;
-`;
-
-const ContainerTitle = styled.h4``;
-
-const ContainerTitleLink = styled.a``;
-
-const ContainerDescription = styled.p`
-  padding: 0em 4em 0em 4em;
-  font-size: .9em;
-`;
-
 const SourceCode = styled.dl`
   padding-top: 20px;
 `;
@@ -143,9 +148,9 @@ function CodeArea({ sources, display }) {
 
 export default function renderExamples(examples) {
   const exampleComponents = examples.map(example => {
-    const { Model, Component, title, sources } = example;
+    const { Model, Component, title, sources, description } = example;
 
-    const ExampleModel = createExampleModel({ Model, title, sources });
+    const ExampleModel = createExampleModel({ Model, title, sources, description });
     const ExampleComponent = createExampleComponent(Component);
 
     const store = createStore(ExampleModel);
