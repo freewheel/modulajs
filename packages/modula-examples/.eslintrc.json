@@ -13,6 +13,7 @@
     "no-prototype-builtins": "off",
     "no-underscore-dangle": "off",
     "no-unused-expressions": "off",
+    "react/no-array-index-key": "off",
     "react/forbid-prop-types": "warn",
     "react/jsx-filename-extension": "off",
     "react/prop-types": "off"

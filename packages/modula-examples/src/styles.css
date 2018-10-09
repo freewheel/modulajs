@@ -91,6 +91,10 @@ div.column {
   padding: 1.2em;
   background: #5755d910;
 }
+#content #spa section .column.left .example p {
+  padding-left: 0;
+  margin-top: .5em;
+}
 
 /* content - spa - section - right */
 #content #spa section .column.right {

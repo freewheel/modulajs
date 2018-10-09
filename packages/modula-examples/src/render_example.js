@@ -9,134 +9,136 @@ import SyntaxHighlighter from 'react-syntax-highlighter/prism';
 import { tomorrow } from 'react-syntax-highlighter/styles/prism';
 
 const ActionTypes = {
-  DISPLAY_CHANGE: 'EXAMPLE_DISPLAY_CHANGE'
+  CODE_TAB_CHANGE: 'EXAMPLE_CODE_TAB_CHANGE'
 };
 
-const createExampleModel = ({ Model, title, sources, description }) => {
+const createExampleModel = ({ Model, slug }) => {
   class ExampleModel extends ModulaModel {
-    sendDisplayChange(value) {
-      this.dispatch({ 
-        type: ActionTypes.DISPLAY_CHANGE,
+    static defaultProps = {
+      decoratedModel: () => new Model(),
+      slug,
+      currentTab: 0
+    };
+    static actionTypes = ActionTypes;
+
+    sendCodeTabChange(value) {
+      this.dispatch({
+        type: ActionTypes.CODE_TAB_CHANGE,
         payload: { value }
       });
     }
 
-    recvDisplayChange() {
+    recvCodeTabChange() {
       return {
-        type: ActionTypes.DISPLAY_CHANGE,
+        type: ActionTypes.CODE_TAB_CHANGE,
         update(model, action) {
           const { value } = action.payload;
-          const newModel = model.set('display', value);
+          const newModel = model.set('currentTab', value);
+
           return [newModel];
         }
       };
     }
 
-
     // TODO: this model should be the child of a Page model, which also contains the nav model
     // and retains the current focus id in it's context
     sendMouseOver() {
-      const exampleLinkId = `${this.get('title').replace(/ /g,'-').toLowerCase()}-link`;
+      const exampleLinkId = `${this.get('slug')}-link`;
       document.getElementById(exampleLinkId).classList.add('hover');
     }
 
     sendMouseOut() {
-      const exampleLinkId = `${this.get('title').replace(/ /g,'-').toLowerCase()}-link`;
+      const exampleLinkId = `${this.get('slug')}-link`;
       document.getElementById(exampleLinkId).classList.remove('hover');
     }
   }
 
-  ExampleModel.defaultProps = {
-    decoratedModel: () => new Model(),
-    title,
-    description,
-    sources,
-    display: 0
-  };
-  ExampleModel.actionTypes = ActionTypes;
-
   return ExampleModel;
 };
 
-const createExampleComponent = Component => ({ model }) => {
-  const id = model.get('title').replace(/ /g,'-').toLowerCase();
+const createExampleComponent = ({
+  Component,
+  sources,
+  Description,
+  title
+}) => ({ model }) => {
+  const id = model.get('slug');
+  const sourceFilename = Object.keys(sources)[model.get('currentTab')];
+
   return (
-    <section 
-      key={id} 
-      id={id} 
-      className='columns' 
+    <section
+      key={id}
+      id={id}
+      className="columns"
       onMouseOver={() => model.sendMouseOver()}
       onFocus={() => model.sendMouseOver()}
       onMouseOut={() => model.sendMouseOut()}
       onBlur={() => model.sendMouseOut()}
     >
-      <div className='column col-md-12 col-6 left'>
+      <div className="column col-md-12 col-6 left">
         <h4>
           <a
             href={`#${id}`}
             title="see it in a separate page, which shows more information including source code"
           >
-            {model.get('title')}
+            {title}
           </a>
         </h4>
-        <p>
-          {model.get('description')}
-        </p>
-        <div className='example'>
+        <Description />
+        <div className="example">
           <Component model={model.get('decoratedModel')} />
         </div>
       </div>
-      <div className='column col-md-12 col-6 right'>
-        <Tabs sources={model.get('sources')} display={model.get('display')} onDisplayChange={model.sendDisplayChange} />
-        <CodeArea sources={model.get('sources')} display={model.get('display')} />
+      <div className="column col-md-12 col-6 right">
+        <Tabs
+          sources={sources}
+          currentTab={model.get('currentTab')}
+          onChange={model.sendCodeTabChange}
+        />
+        <CodeArea name={sourceFilename} code={sources[sourceFilename]} />
       </div>
     </section>
   );
 };
 
-function Tab({index, title, display, onDisplayChange}){
+function Tab({ label, active, onClick }) {
   return (
-    <li 
-      className={(index === display) ? 'tab-item active' : 'tab-item'}
-      key={index}
-    >
-      <a 
-        href="/#" 
-        className={(index === display) ? 'active' : ''}
-        onClick={() => onDisplayChange(index)}
+    <li className={active ? 'tab-item active' : 'tab-item'}>
+      <a
+        href="/#"
+        className={active ? 'active' : ''}
+        onClick={event => {
+          event.preventDefault();
+          onClick();
+        }}
       >
-        {title}
+        {label}
       </a>
     </li>
-  )
+  );
 }
 
-function Tabs({ sources, display, onDisplayChange }){
+function Tabs({ sources, currentTab, onChange }) {
   const tabs = Object.keys(sources).map((key, index) => (
-    <Tab 
-      index={index} 
+    <Tab
       key={key}
-      title={key} 
-      display={display} 
-      onDisplayChange={onDisplayChange} 
-    />)
-  );
-  return (
-    <ul className="tab tab-block">
-      {tabs}
-    </ul>
-  );
+      label={key}
+      active={currentTab === index}
+      onClick={() => {
+        onChange(index);
+      }}
+    />
+  ));
+
+  return <ul className="tab tab-block">{tabs}</ul>;
 }
 
-function CodeArea({ sources, display }) {
-  const key = Object.keys(sources)[display];
-  const fileName = sources[key];
-  const fileContent = sources[key];
+function CodeArea({ name, code }) {
   return (
-    <dl key={fileName}>
+    <dl key={name}>
       <dd>
         <SyntaxHighlighter language="javascript" style={tomorrow}>
-          {fileContent}
+          {code}
         </SyntaxHighlighter>
       </dd>
     </dl>
@@ -145,10 +147,20 @@ function CodeArea({ sources, display }) {
 
 export default function renderExamples(examples) {
   const exampleComponents = examples.map(example => {
-    const { Model, Component, title, sources, description } = example;
+    const { Model, Component, title, sources, Description } = example;
 
-    const ExampleModel = createExampleModel({ Model, title, sources, description });
-    const ExampleComponent = createExampleComponent(Component);
+    const slug = title.replace(/ /g, '-').toLowerCase();
+
+    const ExampleModel = createExampleModel({
+      Model,
+      slug
+    });
+    const ExampleComponent = createExampleComponent({
+      Component,
+      title,
+      sources,
+      Description
+    });
 
     const store = createStore(ExampleModel);
     const Example = createContainer(store, ExampleComponent);
@@ -157,9 +169,7 @@ export default function renderExamples(examples) {
   });
 
   ReactDOM.render(
-    <span>
-      {exampleComponents}
-    </span>,
+    <span>{exampleComponents}</span>,
     document.getElementById('spa')
   );
 }

@@ -1,29 +1,30 @@
-
 import renderNav from './render_nav';
 import renderExamples from './render_example';
 
-import Example00 from './00_create_model';
-import Example01 from './01_counter';
-import Example02 from './02_counter_list';
-import Example03 from './03_dynamic_action_chain';
-import Example04 from './04_model_services';
-import Example05 from './05_default_send_update';
-import Example06 from './06_hot_zone';
-import Example07 from './07_when_changed';
-import Example08 from './08_class_mixin';
-import Example09 from './09_functional_programming';
+import counterExample from './counter';
+import counterListExample from './counter_list';
+import defaultSendUpdateExample from './default_send_update';
+import functionalProgrammingExample from './functional_programming';
+import handlingSideEffectsExample from './handling_side_effects';
+import modelContextExample from './model_context';
+import modelLifecycleExample from './model_lifecycle';
+import modelServicesExample from './model_services';
+import classMixinExample from './class_mixin';
+import hotZoneExample from './hot_zone';
+import createModelExample from './create_model';
 
 const examples = [
-  Example00,
-  Example01,
-  Example02,
-  Example03,
-  Example04,
-  Example05,
-  Example06,
-  Example07,
-  Example08,
-  Example09
+  counterExample,
+  counterListExample,
+  defaultSendUpdateExample,
+  functionalProgrammingExample,
+  handlingSideEffectsExample,
+  modelContextExample,
+  modelLifecycleExample,
+  modelServicesExample,
+  classMixinExample,
+  hotZoneExample,
+  createModelExample
 ];
 
 renderNav(examples);
