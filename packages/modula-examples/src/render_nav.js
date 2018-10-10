@@ -5,9 +5,7 @@ import ReactDOM from 'react-dom';
 function renderLink(slug, title) {
   return (
     <li className="nav-item" key={slug}>
-      <a href={`#${slug}`}>
-        {title}
-      </a>
+      <a href={`#${slug}`}>{title}</a>
     </li>
   );
 }

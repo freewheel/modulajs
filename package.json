@@ -16,14 +16,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@git.dev.fwmrm.net:BenCao/modula-next.git"
+    "url": "git@github.com:freewheel/modulajs.git"
   },
   "keywords": [
     "modula",
     "next"
   ],
-  "author": "Ben Cao",
-  "license": "MIT",
+  "author": "FreeWheel",
+  "license": "Apache",
   "devDependencies": {
     "lerna": "^2.11.0",
     "prettier": "^1.11.1"

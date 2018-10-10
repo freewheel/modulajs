@@ -136,6 +136,7 @@ div.column {
 }
 #content #spa section .column.doc .markdown p,
 #content #spa section .column.doc .markdown ul,
+#content #spa section .column.doc .markdown ol,
 #content #spa section .column.doc .markdown table {
   font-size: 0.9em;
 }

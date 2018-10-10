@@ -16,14 +16,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@git.dev.fwmrm.net:BenCao/modula-next.git"
+    "url": "git@github.com:freewheel/modulajs.git"
   },
   "keywords": [
     "modula",
     "react"
   ],
-  "author": "Ben Cao",
-  "license": "MIT",
+  "author": "FreeWheel",
+  "license": "Apache",
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",

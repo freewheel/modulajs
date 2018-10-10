@@ -24,7 +24,7 @@
     "util"
   ],
   "author": "Ben Cao",
-  "license": "MIT",
+  "license": "Apache",
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",

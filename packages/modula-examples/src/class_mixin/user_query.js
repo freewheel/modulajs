@@ -1,12 +1,4 @@
-import {
-  slice,
-  prop,
-  pipe,
-  sortBy,
-  when,
-  always,
-  reverse
-} from 'ramda';
+import { slice, prop, pipe, sortBy, when, always, reverse } from 'ramda';
 
 const UserDB = [
   { id: 1, name: 'Diane' },

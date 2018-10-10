@@ -1,7 +1,7 @@
 {
   "name": "modula-examples",
   "version": "1.0.0",
-  "description": "Modula examples",
+  "description": "Modula project site with examples and docs",
   "main": "lib/index.js",
   "scripts": {
     "start": "parcel src/index.html",
@@ -13,14 +13,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@git.dev.fwmrm.net:BenCao/modula-next.git"
+    "url": "git@github.com:freewheel/modulajs.git"
   },
   "keywords": [
     "modula",
     "examples"
   ],
-  "author": "Ben Cao",
-  "license": "MIT",
+  "author": "FreeWheel",
+  "license": "Apache",
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.2.2",
