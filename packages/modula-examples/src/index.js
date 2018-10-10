@@ -1,5 +1,5 @@
 import renderNav from './render_nav';
-import renderExamples from './render_example';
+import render from './render_content';
 
 import counterExample from './counter';
 import counterListExample from './counter_list';
@@ -12,6 +12,8 @@ import modelServicesExample from './model_services';
 import classMixinExample from './class_mixin';
 import hotZoneExample from './hot_zone';
 import createModelExample from './create_model';
+
+import docs from './docs';
 
 const examples = [
   counterExample,
@@ -27,5 +29,5 @@ const examples = [
   createModelExample
 ];
 
-renderNav(examples);
-renderExamples(examples);
+renderNav(examples, docs);
+render(examples, docs);

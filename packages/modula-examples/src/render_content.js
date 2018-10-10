@@ -1,12 +1,13 @@
-import React from 'react';
-
 /* eslint-env browser */
+import React from 'react';
 import ReactDOM from 'react-dom';
 import { createStore, Model as ModulaModel } from 'modula';
 import { createContainer } from 'modula-react';
 
 import SyntaxHighlighter from 'react-syntax-highlighter/prism';
 import { tomorrow } from 'react-syntax-highlighter/styles/prism';
+
+import ReactMarkdown from 'react-markdown';
 
 const ActionTypes = {
   CODE_TAB_CHANGE: 'EXAMPLE_CODE_TAB_CHANGE'
@@ -39,18 +40,6 @@ const createExampleModel = ({ Model, slug }) => {
         }
       };
     }
-
-    // TODO: this model should be the child of a Page model, which also contains the nav model
-    // and retains the current focus id in it's context
-    sendMouseOver() {
-      const exampleLinkId = `${this.get('slug')}-link`;
-      document.getElementById(exampleLinkId).classList.add('hover');
-    }
-
-    sendMouseOut() {
-      const exampleLinkId = `${this.get('slug')}-link`;
-      document.getElementById(exampleLinkId).classList.remove('hover');
-    }
   }
 
   return ExampleModel;
@@ -66,21 +55,10 @@ const createExampleComponent = ({
   const sourceFilename = Object.keys(sources)[model.get('currentTab')];
 
   return (
-    <section
-      key={id}
-      id={id}
-      className="columns"
-      onMouseOver={() => model.sendMouseOver()}
-      onFocus={() => model.sendMouseOver()}
-      onMouseOut={() => model.sendMouseOut()}
-      onBlur={() => model.sendMouseOut()}
-    >
+    <section key={id} id={id} className="columns">
       <div className="column col-md-12 col-6 left">
         <h4>
-          <a
-            href={`#${id}`}
-            title="see it in a separate page, which shows more information including source code"
-          >
+          <a href={`#{id}`} name={id}>
             {title}
           </a>
         </h4>
@@ -145,31 +123,51 @@ function CodeArea({ name, code }) {
   );
 }
 
-export default function renderExamples(examples) {
-  const exampleComponents = examples.map(example => {
-    const { Model, Component, title, sources, Description } = example;
-
-    const slug = title.replace(/ /g, '-').toLowerCase();
-
-    const ExampleModel = createExampleModel({
-      Model,
-      slug
-    });
-    const ExampleComponent = createExampleComponent({
-      Component,
-      title,
-      sources,
-      Description
-    });
-
-    const store = createStore(ExampleModel);
-    const Example = createContainer(store, ExampleComponent);
-
-    return <Example key={title} />;
-  });
-
-  ReactDOM.render(
-    <span>{exampleComponents}</span>,
-    document.getElementById('spa')
+function Doc({ slug, title, source }) {
+  return (
+    <section id={slug} className="columns">
+      <div className="column col-md-12 col-12 doc">
+        <h4>
+          <a href={`#{slug}`} name={slug}>
+            {title}
+          </a>
+        </h4>
+        <div className="markdown">
+          <ReactMarkdown source={source} />
+        </div>
+      </div>
+    </section>
   );
+}
+
+export default function render(examples, docs) {
+  const components = examples
+    .map(example => {
+      const { Model, Component, title, slug, sources, Description } = example;
+
+      const ExampleModel = createExampleModel({
+        Model,
+        slug
+      });
+      const ExampleComponent = createExampleComponent({
+        Component,
+        title,
+        sources,
+        Description
+      });
+
+      const store = createStore(ExampleModel);
+      const Example = createContainer(store, ExampleComponent);
+
+      return <Example key={title} />;
+    })
+    .concat(
+      docs.map(doc => {
+        const { slug, title, source } = doc;
+
+        return <Doc key={slug} slug={slug} title={title} source={source} />;
+      })
+    );
+
+  ReactDOM.render(<div>{components}</div>, document.getElementById('spa'));
 }

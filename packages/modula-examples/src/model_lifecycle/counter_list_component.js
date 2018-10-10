@@ -12,7 +12,11 @@ const CounterListModelComponent = ({ model }) => (
           <CounterModelComponent key={index} model={counterModel} />
         ))}
     </div>
-    <ul>{model.get('messages').map(message => <li>{message}</li>)}</ul>
+    <ul>
+      {model
+        .get('messages')
+        .map((message, index) => <li key={index}>{message}</li>)}
+    </ul>
     <div className="btn-group btn-group-block">
       <button
         className="btn btn-primary"

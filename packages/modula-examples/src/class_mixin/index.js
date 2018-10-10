@@ -4,20 +4,6 @@ import React from 'react';
 import Model from './user_list_model';
 import Component from './user_list_component';
 
-const sources = {
-  'User List Model': fs.readFileSync(`${__dirname}/user_list_model.js`, 'utf8'),
-  'User List Mixins': fs.readFileSync(
-    `${__dirname}/user_list_mixins.js`,
-    'utf8'
-  ),
-  'User List Component': fs.readFileSync(
-    `${__dirname}/user_list_component.js`,
-    'utf8'
-  ),
-  'User Query': fs.readFileSync(`${__dirname}/user_query.js`, 'utf8')
-};
-const title = 'Class Mixins';
-
 const Description = () => (
   <div>
     <p>
@@ -39,9 +25,24 @@ const Description = () => (
 );
 
 export default {
-  title,
   Model,
   Component,
   Description,
-  sources
+  title: 'Class Mixins',
+  slug: 'examples-class-mixins',
+  sources: {
+    'User List Model': fs.readFileSync(
+      `${__dirname}/user_list_model.js`,
+      'utf8'
+    ),
+    'User List Mixins': fs.readFileSync(
+      `${__dirname}/user_list_mixins.js`,
+      'utf8'
+    ),
+    'User List Component': fs.readFileSync(
+      `${__dirname}/user_list_component.js`,
+      'utf8'
+    ),
+    'User Query': fs.readFileSync(`${__dirname}/user_query.js`, 'utf8')
+  }
 };

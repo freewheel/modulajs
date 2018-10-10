@@ -4,12 +4,6 @@ import React from 'react';
 import Model from './todos_model';
 import Component from './todos_component';
 
-const sources = {
-  'Todos Model': fs.readFileSync(`${__dirname}/todos_model.js`, 'utf8'),
-  'Todos Component': fs.readFileSync(`${__dirname}/todos_component.js`, 'utf8')
-};
-const title = 'Handling Side Effects';
-
 const Description = () => (
   <div>
     <p>
@@ -28,9 +22,16 @@ const Description = () => (
 );
 
 export default {
-  title,
   Model,
   Component,
   Description,
-  sources
+  title: 'Handling Side Effects',
+  slug: 'examples-handling-side-effects',
+  sources: {
+    'Todos Model': fs.readFileSync(`${__dirname}/todos_model.js`, 'utf8'),
+    'Todos Component': fs.readFileSync(
+      `${__dirname}/todos_component.js`,
+      'utf8'
+    )
+  }
 };

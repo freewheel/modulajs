@@ -36,10 +36,10 @@ div.column {
 }
 #sidebar .nav .nav-item a {
   color: #667189;
-  padding: 0 .2em 0 0;
+  padding: 0 0.2em 0 0;
   text-decoration: none;
   text-indent: 0em;
-  font-size: .8em;
+  font-size: 0.8em;
 }
 #sidebar .nav .nav-item a:hover {
   color: #5755d9;
@@ -62,7 +62,8 @@ div.column {
   padding: 3em 0;
   background: linear-gradient(234deg, #04034d, #2f2da0, #04034d);
 }
-#content #banner h1 a, #banner h1 a:visited {
+#content #banner h1 a,
+#banner h1 a:visited {
   font-size: 1em;
   color: #fff;
   display: block;
@@ -84,7 +85,7 @@ div.column {
 }
 #content #spa section .column.left p {
   padding: 0em 4em 0em 4em;
-  font-size: .9em;
+  font-size: 0.9em;
 }
 #content #spa section .column.left .example {
   margin: 2em;
@@ -93,7 +94,7 @@ div.column {
 }
 #content #spa section .column.left .example p {
   padding-left: 0;
-  margin-top: .5em;
+  margin-top: 0.5em;
 }
 
 /* content - spa - section - right */
@@ -103,22 +104,58 @@ div.column {
 #content #spa section .column.right .tab {
   background: #5755d9bb; /* #FFF1; */
   margin: 0;
-  color: #FFFA;
+  color: #fffa;
   border: none;
   padding-top: 1em;
-  font-size: .9em;
+  font-size: 0.9em;
   outline: none;
 }
 #content #spa section .column.right .tab .tab-item a {
   border-bottom: 6px solid #0000;
 }
-#content #spa section .column.right .tab .tab-item.active a.active, 
-#content #spa section .column.right .tab .tab-item.active a.active:focus, 
+#content #spa section .column.right .tab .tab-item.active a.active,
+#content #spa section .column.right .tab .tab-item.active a.active:focus,
 #content #spa section .column.right .tab .tab-item:hover a {
-  color: #FFF;
-  border-bottom: 6px solid #FFF5;
+  color: #fff;
+  border-bottom: 6px solid #fff5;
 }
 #content #spa .column.right dd {
   margin: 0;
+  font-size: 0.8em;
+}
+#content #spa section .column.right pre code {
+  padding: 0;
+}
+
+/* content - spa - section - doc */
+#content #spa section .column.doc h4 {
+  padding: 1em;
+}
+#content #spa section .column.doc .markdown {
+  margin: 1em 2em;
+}
+#content #spa section .column.doc .markdown p,
+#content #spa section .column.doc .markdown ul,
+#content #spa section .column.doc .markdown table {
+  font-size: 0.9em;
+}
+#content #spa section .column.doc .markdown h1,
+#content #spa section .column.doc .markdown h2 {
+  font-size: 1.1em;
+}
+#content #spa section .column.doc .markdown h3,
+#content #spa section .column.doc .markdown h4 {
+  font-size: 1em;
+}
+#content #spa section .column.doc .markdown pre {
+  border: 1px solid #ccc;
+  background: #f8f8f8;
+  padding: 0.6em;
+}
+#content #spa section .column.doc .markdown code {
   font-size: .8em;
+  overflow-x: auto;
+  padding: 0;
+  color: #333;
+  background: #f8f8f8;
 }

@@ -4,12 +4,6 @@ import React from 'react';
 import Model from './model';
 import Component from './component';
 
-const sources = {
-  Model: fs.readFileSync(`${__dirname}/model.js`, 'utf8'),
-  Component: fs.readFileSync(`${__dirname}/component.js`, 'utf8')
-};
-const title = 'Default sendUpdate';
-
 const Description = () => (
   <p>
     This example demonstrates how we can utilize the default model sendUpdate
@@ -19,9 +13,13 @@ const Description = () => (
 );
 
 export default {
-  title,
   Model,
   Component,
   Description,
-  sources
+  title: 'Default sendUpdate',
+  slug: 'examples-default-sendupdate',
+  sources: {
+    Model: fs.readFileSync(`${__dirname}/model.js`, 'utf8'),
+    Component: fs.readFileSync(`${__dirname}/component.js`, 'utf8')
+  }
 };

@@ -4,18 +4,6 @@ import React from 'react';
 import Model from './counter_list_model';
 import Component from './counter_list_component';
 
-const sources = {
-  'Counter List Model': fs.readFileSync(
-    `${__dirname}/counter_list_model.js`,
-    'utf8'
-  ),
-  'Counter List Component': fs.readFileSync(
-    `${__dirname}/counter_list_component.js`,
-    'utf8'
-  )
-};
-const title = 'Model Lifecycle';
-
 const Description = () => (
   <div>
     <p>
@@ -33,9 +21,19 @@ const Description = () => (
 );
 
 export default {
-  title,
   Model,
   Component,
   Description,
-  sources
+  title: 'Model Lifecycle',
+  slug: 'examples-model-lifecycle',
+  sources: {
+    'Counter List Model': fs.readFileSync(
+      `${__dirname}/counter_list_model.js`,
+      'utf8'
+    ),
+    'Counter List Component': fs.readFileSync(
+      `${__dirname}/counter_list_component.js`,
+      'utf8'
+    )
+  }
 };

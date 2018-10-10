@@ -4,15 +4,6 @@ import React from 'react';
 import Model from './context_model';
 import Component from './context_component';
 
-const sources = {
-  'Context Model': fs.readFileSync(`${__dirname}/context_model.js`, 'utf8'),
-  'Context Component': fs.readFileSync(
-    `${__dirname}/context_component.js`,
-    'utf8'
-  )
-};
-const title = 'Model Context';
-
 const Description = () => (
   <div>
     <p>
@@ -34,9 +25,16 @@ const Description = () => (
 );
 
 export default {
-  title,
   Model,
   Component,
   Description,
-  sources
+  title: 'Model Context',
+  slug: 'examples-model-context',
+  sources: {
+    'Context Model': fs.readFileSync(`${__dirname}/context_model.js`, 'utf8'),
+    'Context Component': fs.readFileSync(
+      `${__dirname}/context_component.js`,
+      'utf8'
+    )
+  }
 };
