@@ -1,0 +1,58 @@
+{
+  "name": "modula-examples",
+  "version": "1.0.0",
+  "description": "Modula project site with examples and docs",
+  "main": "lib/index.js",
+  "scripts": {
+    "start": "parcel src/index.html",
+    "build": "parcel build src/index.html",
+    "watch": "parcel src/index.html",
+    "lint": "eslint --cache --cache-location node_modules/.cache --ext js,jsx src",
+    "clean": "rimraf dist/",
+    "format": "prettier --write \"src/**/*.{js,json}\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:freewheel/modulajs.git"
+  },
+  "keywords": [
+    "modula",
+    "examples"
+  ],
+  "author": "FreeWheel",
+  "license": "Apache",
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-eslint": "^8.2.2",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-export-default": "^7.0.0-alpha.20",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-flow": "^6.23.0",
+    "babel-preset-react": "^6.24.1",
+    "babel-register": "^6.26.0",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-chai-friendly": "^0.4.1",
+    "eslint-plugin-import": "^2.9.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-react": "^7.7.0",
+    "flow-bin": "^0.69.0",
+    "parcel-bundler": "^1.7.0",
+    "prettier": "^1.11.1",
+    "rimraf": "^2.6.2"
+  },
+  "dependencies": {
+    "debug": "^3.1.0",
+    "modula": "^1.0.0",
+    "modula-create-constants": "^1.0.0",
+    "modula-create-model": "^1.0.0",
+    "modula-react": "^1.0.0",
+    "ramda": "^0.25.0",
+    "react": "^16.3.1",
+    "react-dom": "^16.3.1",
+    "react-markdown": "^4.0.2",
+    "react-syntax-highlighter": "^7.0.2"
+  }
+}

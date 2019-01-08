@@ -1,0 +1,8 @@
+{
+  "plugins": [
+    "transform-class-properties",
+    "transform-export-default",
+    "transform-object-rest-spread"
+  ],
+  "presets": ["env", "flow"]
+}

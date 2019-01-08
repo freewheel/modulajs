@@ -1,0 +1,24 @@
+{
+  "env": {
+    "mocha": true
+  },
+  "parser": "babel-eslint",
+  "extends": ["airbnb", "prettier"],
+  "plugins": ["chai-friendly"],
+  "rules": {
+    "chai-friendly/no-unused-expressions": "error",
+    "class-methods-use-this": "off",
+    "no-else-return": "off",
+    "no-param-reassign": "warn",
+    "no-prototype-builtins": "off",
+    "no-underscore-dangle": "off",
+    "no-unused-expressions": "off",
+    "react/no-array-index-key": "off",
+    "react/forbid-prop-types": "warn",
+    "react/jsx-filename-extension": "off",
+    "react/prop-types": "off"
+  },
+  "settings": {
+    "import/core-modules": ["modula-next"]
+  }
+}
