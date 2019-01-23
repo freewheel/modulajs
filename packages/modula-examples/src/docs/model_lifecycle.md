@@ -88,16 +88,16 @@ A parent model need to constantly monitor and reconcile data within its territor
 
 ```
 class ParentModel extends Model {
-  modelWillUpdate(sourceModel) {
+  modelWillUpdate(oldModel) {
     // keep data in child1 and child2 in sync
     const dataFromChild1 = this.get('child1').get('data');
     const dataFromChild2 = this.get('child2').get('data');
 
     if (!deepEquals(dataFromChild1, dataFromChild2)) {
-      if (sourceModel === this.get('child1')) {
+      if (oldModel.get('child1') !== this.get('child1')) {
         // use child1's data since update is from there
         return this.set('child2', child2 => child2.set('data', dataFromChild1));
-      } else if (sourceModel === this.get('child2')) {
+      } else if (oldModel.get('child2') !== this.get('child2')) {
         // use child2's data since update is from there
         return this.set('child2', child2 => child2.set('data', dataFromChild1));
       }

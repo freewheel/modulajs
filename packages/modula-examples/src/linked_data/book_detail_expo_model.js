@@ -42,21 +42,22 @@ class BookDetailExpoModel extends Model {
     })
   };
 
-  modelWillUpdate(sourceModel) {
+  modelWillUpdate(oldModel) {
     // reconcile book attributes in different models
     //
     // this case is complicated since all 3 books can have changes
     // meaning there's no single source of truth
     // so we need to handle update differently base on the source of a change
-    const bookFromModel = this.get('book');
 
-    if (sourceModel === this.get('bookDetailV2018')) {
+    if (oldModel.get('bookDetailV2018') !== this.get('bookDetailV2018')) {
       const bookFromV2018 = {
         name: this.get('bookDetailV2018').get('title'),
         likes: this.get('bookDetailV2018').get('likes')
       };
 
-      if (!equals(bookFromModel, bookFromV2018)) {
+      if (equals(this.get('book'), bookFromV2018)) {
+        return this;
+      } else {
         // take 2018 book value as the primary value
         return this.setMulti({
           book: bookFromV2018,
@@ -74,13 +75,15 @@ class BookDetailExpoModel extends Model {
       }
     }
 
-    if (sourceModel === this.get('bookDetailV2019')) {
+    if (oldModel.get('bookDetailV2019') !== this.get('bookDetailV2019')) {
       const bookFromV2019 = {
         name: this.get('bookDetailV2019').get('name'),
         likes: this.get('bookDetailV2019').get('likes')
       };
 
-      if (!equals(bookFromModel, bookFromV2019)) {
+      if (equals(this.get('book'), bookFromV2019)) {
+        return this;
+      } else {
         // take 2019 book value as the primary value
         return this.setMulti({
           book: bookFromV2019,
@@ -98,37 +101,32 @@ class BookDetailExpoModel extends Model {
       }
     }
 
-    if (sourceModel === this) {
-      const bookFromV2018 = {
-        name: this.get('bookDetailV2018').get('title'),
-        likes: this.get('bookDetailV2018').get('likes')
-      };
+    if (!equals(oldModel.get('book'), this.get('book'))) {
+      const bookFromModel = this.get('book');
 
-      if (!equals(bookFromModel, bookFromV2018)) {
-        // take model book value as the primary value
-        return this.setMulti({
-          bookDetailV2018: origin => {
-            if (origin) {
-              return origin.setMulti({
-                title: bookFromModel.name,
-                likes: bookFromModel.likes
-              });
-            } else {
-              return origin;
-            }
-          },
-          bookDetailV2019: origin => {
-            if (origin) {
-              return origin.setMulti({
-                name: bookFromModel.name,
-                likes: bookFromModel.likes
-              });
-            } else {
-              return origin;
-            }
+      // take model book value as the primary value
+      return this.setMulti({
+        bookDetailV2018: origin => {
+          if (origin) {
+            return origin.setMulti({
+              title: bookFromModel.name,
+              likes: bookFromModel.likes
+            });
+          } else {
+            return origin;
           }
-        });
-      }
+        },
+        bookDetailV2019: origin => {
+          if (origin) {
+            return origin.setMulti({
+              name: bookFromModel.name,
+              likes: bookFromModel.likes
+            });
+          } else {
+            return origin;
+          }
+        }
+      });
     }
 
     return this;

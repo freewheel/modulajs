@@ -15,7 +15,6 @@ import {
   useWith,
   unapply,
   reduceRight,
-  take,
   prop
 } from 'ramda';
 import debug from 'debug';
@@ -152,29 +151,18 @@ function houseKeeping(mountedModels, unmountedModels, updatedModels) {
 }
 
 export function atomUpdate(oldRootModel, path, newReactorModel) {
-  // handle reactor model separately
-  // since we need we need a pointer to this "sourceModel"
-  const sourceModel =
-    newReactorModel.modelWillUpdate ?
-      newReactorModel.modelWillUpdate(newReactorModel) :
-      newReactorModel;
-
-  const initialNewRootModel = oldRootModel.updateIn(path, sourceModel);
-  const intermediatePaths = getIntermidiatePaths(path);
-
   return reduceRight(
     (p, memo) => {
-      const currModel = memo.getIn(p);
+      const current = memo.getIn(p);
 
-      if (currModel.modelWillUpdate) {
-        return memo.updateIn(p, currModel.modelWillUpdate(sourceModel));
+      if (isModel(current) && current.modelWillUpdate) {
+        return memo.updateIn(p, current.modelWillUpdate(oldRootModel.getIn(p)));
       } else {
         return memo;
       }
     },
-    initialNewRootModel,
-    // should skip reactor model since it's already handled
-    take(intermediatePaths.length - 1, intermediatePaths)
+    oldRootModel.updateIn(path, newReactorModel),
+    getIntermidiatePaths(path)
   );
 }
 
