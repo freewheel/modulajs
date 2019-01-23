@@ -1,6 +1,5 @@
 import {
   head,
-  last,
   map,
   find,
   reject,
@@ -12,6 +11,7 @@ import {
   bind
 } from 'ramda';
 import { isModel } from '../model';
+import { getIntermidiatePaths } from '../path';
 
 const containsPeer = list => m => any(bind(m.isPeer, m))(list);
 
@@ -41,14 +41,7 @@ export function getUpdatedModels(oldModels, newModels) {
 }
 
 export function getUpdatedModelsInPath(oldRootModel, newRootModel, path) {
-  // given [ 'a', 'b', 'c' ]
-  // returns all intermediate paths like
-  // [ [], ['a'], ['a', 'b'], ['a', 'b', 'c'] ]
-  const intermediatePaths = reduce(
-    (visited, current) => append(append(current, last(visited)), visited),
-    [[]],
-    path
-  );
+  const intermediatePaths = getIntermidiatePaths(path);
 
   return reduce(
     (memo, p) => {

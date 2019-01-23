@@ -14,6 +14,8 @@ import {
   assoc,
   useWith,
   unapply,
+  reduceRight,
+  take,
   prop
 } from 'ramda';
 import debug from 'debug';
@@ -24,6 +26,7 @@ import {
   setAsPhasingOut
 } from '../model';
 import { diff } from '../diff';
+import { getIntermidiatePaths } from '../path';
 import getReactions from './get_reactions';
 
 const reactionDebug = debug('modula:reaction');
@@ -148,6 +151,33 @@ function houseKeeping(mountedModels, unmountedModels, updatedModels) {
   }, updatedModels);
 }
 
+export function atomUpdate(oldRootModel, path, newReactorModel) {
+  // handle reactor model separately
+  // since we need we need a pointer to this "sourceModel"
+  const sourceModel =
+    newReactorModel.modelWillUpdate ?
+      newReactorModel.modelWillUpdate(newReactorModel) :
+      newReactorModel;
+
+  const initialNewRootModel = oldRootModel.updateIn(path, sourceModel);
+  const intermediatePaths = getIntermidiatePaths(path);
+
+  return reduceRight(
+    (p, memo) => {
+      const currModel = memo.getIn(p);
+
+      if (currModel.modelWillUpdate) {
+        return memo.updateIn(p, currModel.modelWillUpdate(sourceModel));
+      } else {
+        return memo;
+      }
+    },
+    initialNewRootModel,
+    // should skip reactor model since it's already handled
+    take(intermediatePaths.length - 1, intermediatePaths)
+  );
+}
+
 function applyReaction(rootModel, reaction, action) {
   reactionDebug('apply reaction', rootModel, reaction, action);
 
@@ -172,7 +202,8 @@ function applyReaction(rootModel, reaction, action) {
     throw new Error(`Some side effects for ${action.type} are not functions`);
   }
 
-  const newRootModel = rootModel.updateIn(action.path, newReactorModel);
+  // updateIn and modelWillUpdate in one transaction
+  const newRootModel = atomUpdate(rootModel, action.path, newReactorModel);
 
   const { mountedModels, unmountedModels, updatedModels } = diff(
     rootModel,

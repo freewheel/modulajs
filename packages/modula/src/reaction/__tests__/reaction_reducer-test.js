@@ -4,6 +4,7 @@ import { List, fromJS } from 'immutable';
 import {
   reactionReducer,
   findMatchedReactions,
+  atomUpdate,
   triggerModelLifecycleEvents,
   triggerServicesLifecycleEvents
 } from '../reaction_reducer';
@@ -450,6 +451,91 @@ describe('reactionReducer', () => {
         expect(didMount.calledOnce).to.be.true;
         expect(didMount.calledWith()).to.be.true;
       });
+    });
+
+    it('trigger modelWillUpdate', () => {
+      const lv2ModelWillUpdateSpy = sinon.spy();
+      const lv1ModelWillUpdateSpy = sinon.spy();
+      const rootModelWillUpdateSpy = sinon.spy();
+
+      class Level2ChildModelWithWillUpdate extends Model {
+        modelWillUpdate(sourceModel) {
+          lv2ModelWillUpdateSpy();
+          if (sourceModel === this) {
+            return this.set('name', 'updated-lv2');
+          } else {
+            return this;
+          }
+        }
+      }
+      Level2ChildModelWithWillUpdate.defaultProps = {
+        name: 'lv2',
+        likes: 0
+      };
+
+      class Level1ChildModelWithWillUpdate extends Model {
+        modelWillUpdate(sourceModel) {
+          lv1ModelWillUpdateSpy();
+          if (sourceModel === this) {
+            return this.set('name', 'updated-lv1');
+          } else {
+            return this;
+          }
+        }
+      }
+      Level1ChildModelWithWillUpdate.defaultProps = {
+        name: 'lv1',
+        likes: 0,
+        child: () => new Level2ChildModelWithWillUpdate()
+      };
+
+      class RootModelWithWillUpdate extends Model {
+        modelWillUpdate(sourceModel) {
+          rootModelWillUpdateSpy();
+          if (sourceModel === this) {
+            return this.set('name', 'updated-root');
+          } else {
+            return this;
+          }
+        }
+      }
+      RootModelWithWillUpdate.defaultProps = {
+        name: 'root',
+        likes: 0,
+        child: () => new Level1ChildModelWithWillUpdate()
+      };
+
+      const oldRoot = new RootModelWithWillUpdate();
+
+      // update at root level
+      const newRoot1 = atomUpdate(oldRoot, [], oldRoot.set('likes', 1));
+      expect(rootModelWillUpdateSpy.callCount).to.eq(1);
+      expect(lv1ModelWillUpdateSpy.callCount).to.eq(0);
+      expect(lv2ModelWillUpdateSpy.callCount).to.eq(0);
+      expect(newRoot1.get('name')).to.eq('updated-root');
+
+      rootModelWillUpdateSpy.resetHistory();
+      lv1ModelWillUpdateSpy.resetHistory();
+      lv2ModelWillUpdateSpy.resetHistory();
+
+      const newRoot2 = atomUpdate(oldRoot, ['child'], oldRoot.get('child').set('likes', 1));
+      expect(rootModelWillUpdateSpy.callCount).to.eq(1);
+      expect(lv1ModelWillUpdateSpy.callCount).to.eq(1);
+      expect(lv2ModelWillUpdateSpy.callCount).to.eq(0);
+      expect(newRoot2.get('name')).to.eq('root');
+      expect(newRoot2.get('child').get('name')).to.eq('updated-lv1');
+
+      rootModelWillUpdateSpy.resetHistory();
+      lv1ModelWillUpdateSpy.resetHistory();
+      lv2ModelWillUpdateSpy.resetHistory();
+
+      const newRoot3 = atomUpdate(oldRoot, ['child', 'child'], oldRoot.getIn(['child', 'child']).set('likes', 1));
+      expect(rootModelWillUpdateSpy.callCount).to.eq(1);
+      expect(lv1ModelWillUpdateSpy.callCount).to.eq(1);
+      expect(lv2ModelWillUpdateSpy.callCount).to.eq(1);
+      expect(newRoot3.get('name')).to.eq('root');
+      expect(newRoot3.get('child').get('name')).to.eq('lv1');
+      expect(newRoot3.getIn(['child', 'child']).get('name')).to.eq('updated-lv2');
     });
 
     it('trigger modelDidUpdate', () => {
