@@ -16,7 +16,8 @@
     "react/no-array-index-key": "off",
     "react/forbid-prop-types": "warn",
     "react/jsx-filename-extension": "off",
-    "react/prop-types": "off"
+    "react/prop-types": "off",
+    "import/prefer-default-export": "off"
   },
   "settings": {
     "import/core-modules": ["modula-next"]
