@@ -7,9 +7,11 @@ import Component from './book_detail_expo_component';
 const Description = () => (
   <div>
     <p>
-      Modula is designed to support a deep hierarchy of components, which
-      results in typical component designing with a strong data locality
-      assumption, and that is good for reusability.
+      Modula was designed to support a deep hierarchy of components,
+      consequently self-inclusive components are usually designed with a strong
+      data locality assumption (data structures and their corresponding
+      operations around data structures are packed together), which are
+      necessary for reusability.
     </p>
     <p>
       This design pattern however makes it not as intuitive to share data cross
@@ -20,12 +22,13 @@ const Description = () => (
     <p>
       In this extreme example, we can update the same 'book' data from 3 modula
       models, while in reality we can usually identify one data copy as the
-      "golden" copy thus the reconciliation logic can be simpler.
+      "golden" copy thus the reconciliation logic could be simpler.
     </p>
     <p>
-      Try click on 'like' buttons on different components and see how they are
-      automatically synced. And notice every a few seconds the likes will jump
-      up for 10 which is triggered by the parent expo model.
+      Try click on 'like' buttons on different components and see how the number
+      of likes are automatically synced. And please notice every a few seconds
+      the likes will jump up for 1 which is triggered by a model service in the
+      parent expo model.
     </p>
   </div>
 );

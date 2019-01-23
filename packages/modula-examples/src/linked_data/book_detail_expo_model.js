@@ -30,13 +30,19 @@ const ActionTypes = {
 
 class BookDetailExpoModel extends Model {
   static defaultProps = {
+    // there're 3 copies of the "same" data in this example
+    //
+    // expo model keeps a copy of data
     book: null,
+    // 2018 detail model keeps another copy of data
     bookDetailV2018: null,
+    // 2019 detail model also keeps a copy of data
     bookDetailV2019: null,
     isLoading: true
   };
 
   static services = {
+    // increase like by 1 every 5 seconds
     automaticLike: intervalService(5000, model => {
       model.sendLikeMore(1);
     })
@@ -45,7 +51,7 @@ class BookDetailExpoModel extends Model {
   modelWillUpdate(oldModel) {
     // reconcile book attributes in different models
     //
-    // this case is complicated since all 3 books can have changes
+    // this case is complicated since all 3 books can have updates
     // meaning there's no single source of truth
     // so we need to handle update differently base on the source of a change
 
