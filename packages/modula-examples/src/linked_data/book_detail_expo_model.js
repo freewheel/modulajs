@@ -1,0 +1,204 @@
+import { Model } from 'modula';
+import { equals } from 'ramda';
+import BookDetailV2018Model from './book_detail_v2018_model';
+import BookDetailV2019Model from './book_detail_v2019_model';
+
+const intervalService = function intervalService(interval, onTime) {
+  return function createService(getModel) {
+    let intervalId = null;
+
+    return {
+      modelDidMount() {
+        intervalId = setInterval(() => {
+          onTime(getModel());
+        }, interval);
+      },
+
+      modelWillUnmount() {
+        if (intervalId !== null) {
+          clearInterval(intervalId);
+        }
+      }
+    };
+  };
+};
+
+const ActionTypes = {
+  INIT: 'BOOK_DETAIL_COMPARISION_INIT',
+  LIKE_MORE: 'BOOK_DETAIL_COMPARISION_LIKE_MORE'
+};
+
+class BookDetailExpoModel extends Model {
+  static defaultProps = {
+    book: null,
+    bookDetailV2018: null,
+    bookDetailV2019: null,
+    isLoading: true
+  };
+
+  static services = {
+    automaticLike: intervalService(5000, model => {
+      model.sendLikeMore(1);
+    })
+  };
+
+  modelWillUpdate(sourceModel) {
+    // reconcile book attributes in different models
+    //
+    // this case is complicated since all 3 books can have changes
+    // meaning there's no single source of truth
+    // so we need to handle update differently base on the source of a change
+    const bookFromModel = this.get('book');
+
+    if (sourceModel === this.get('bookDetailV2018')) {
+      const bookFromV2018 = {
+        name: this.get('bookDetailV2018').get('title'),
+        likes: this.get('bookDetailV2018').get('likes')
+      };
+
+      if (!equals(bookFromModel, bookFromV2018)) {
+        // take 2018 book value as the primary value
+        return this.setMulti({
+          book: bookFromV2018,
+          bookDetailV2019: origin => {
+            if (origin) {
+              return origin.setMulti({
+                name: bookFromV2018.name,
+                likes: bookFromV2018.likes
+              });
+            } else {
+              return origin;
+            }
+          }
+        });
+      }
+    }
+
+    if (sourceModel === this.get('bookDetailV2019')) {
+      const bookFromV2019 = {
+        name: this.get('bookDetailV2019').get('name'),
+        likes: this.get('bookDetailV2019').get('likes')
+      };
+
+      if (!equals(bookFromModel, bookFromV2019)) {
+        // take 2019 book value as the primary value
+        return this.setMulti({
+          book: bookFromV2019,
+          bookDetailV2018: origin => {
+            if (origin) {
+              return origin.setMulti({
+                title: bookFromV2019.name,
+                likes: bookFromV2019.likes
+              });
+            } else {
+              return origin;
+            }
+          }
+        });
+      }
+    }
+
+    if (sourceModel === this) {
+      const bookFromV2018 = {
+        name: this.get('bookDetailV2018').get('title'),
+        likes: this.get('bookDetailV2018').get('likes')
+      };
+
+      if (!equals(bookFromModel, bookFromV2018)) {
+        // take model book value as the primary value
+        return this.setMulti({
+          bookDetailV2018: origin => {
+            if (origin) {
+              return origin.setMulti({
+                title: bookFromModel.name,
+                likes: bookFromModel.likes
+              });
+            } else {
+              return origin;
+            }
+          },
+          bookDetailV2019: origin => {
+            if (origin) {
+              return origin.setMulti({
+                name: bookFromModel.name,
+                likes: bookFromModel.likes
+              });
+            } else {
+              return origin;
+            }
+          }
+        });
+      }
+    }
+
+    return this;
+  }
+
+  modelDidMount() {
+    this.sendInit();
+  }
+
+  sendInit() {
+    this.dispatch({
+      type: ActionTypes.INIT,
+      payload: {
+        book: {
+          name: 'Man Month Myth',
+          likes: 150
+        }
+      }
+    });
+  }
+
+  recvInit() {
+    return {
+      type: ActionTypes.INIT,
+      update: (model, action) => {
+        const { book } = action.payload;
+        return [
+          model.setMulti({
+            book,
+            bookDetailV2018: new BookDetailV2018Model({
+              title: book.name,
+              likes: book.likes
+            }),
+            bookDetailV2019: new BookDetailV2019Model({
+              name: book.name,
+              likes: book.likes
+            }),
+            isLoading: false
+          })
+        ];
+      }
+    };
+  }
+
+  sendLikeMore(likes) {
+    this.dispatch({
+      type: ActionTypes.LIKE_MORE,
+      payload: { likes }
+    });
+  }
+
+  recvLikeMore() {
+    return {
+      type: ActionTypes.LIKE_MORE,
+      update: (model, action) => {
+        const { likes } = action.payload;
+
+        if (model.get('book')) {
+          return [
+            model.set('book', {
+              name: model.get('book').name,
+              likes: model.get('book').likes + likes
+            })
+          ];
+        } else {
+          return [model];
+        }
+      }
+    };
+  }
+}
+
+export default BookDetailExpoModel;

@@ -18,7 +18,7 @@ const CounterComponent = ({ value, onIncrement, onDecrement }) => (
   </div>
 );
 
-// a thin layer that glues a model and the a react component
+// a thin layer that glues a model and a react component
 // as a convention we recommend naming a component
 // that accepts model parameter as XxModelComponent
 const CounterModelComponent = ({ model }) => (
