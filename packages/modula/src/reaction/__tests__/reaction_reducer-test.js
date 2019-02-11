@@ -4,6 +4,7 @@ import { List, fromJS } from 'immutable';
 import {
   reactionReducer,
   findMatchedReactions,
+  atomUpdate,
   triggerModelLifecycleEvents,
   triggerServicesLifecycleEvents
 } from '../reaction_reducer';
@@ -450,6 +451,161 @@ describe('reactionReducer', () => {
         expect(didMount.calledOnce).to.be.true;
         expect(didMount.calledWith()).to.be.true;
       });
+    });
+
+    it('trigger modelWillUpdate', () => {
+      const lv3ModelWillUpdateSpy = sinon.spy();
+      const lv2ModelWillUpdateSpy = sinon.spy();
+      const lv1ModelWillUpdateSpy = sinon.spy();
+      const rootModelWillUpdateSpy = sinon.spy();
+
+      class Level3ChildModelWithWillUpdate extends Model {
+        modelWillUpdate(oldModel) {
+          lv3ModelWillUpdateSpy(oldModel);
+          if (oldModel.get('likes') !== this.get('likes')) {
+            return this.set('name', 'liked-lv3');
+          } else {
+            return this;
+          }
+        }
+      }
+      Level3ChildModelWithWillUpdate.defaultProps = {
+        name: 'lv3',
+        likes: 0
+      };
+
+      class Level2ChildModelWithWillUpdate extends Model {
+        modelWillUpdate(oldModel) {
+          lv2ModelWillUpdateSpy(oldModel);
+          if (oldModel.get('likes') !== this.get('likes')) {
+            return this.set('name', 'liked-lv2');
+          } else {
+            return this;
+          }
+        }
+      }
+      Level2ChildModelWithWillUpdate.defaultProps = {
+        name: 'lv2',
+        childObject: () => ({
+          child: new Level3ChildModelWithWillUpdate()
+        }),
+        likes: 0
+      };
+
+      class Level1ChildModelWithWillUpdate extends Model {
+        modelWillUpdate(oldModel) {
+          lv1ModelWillUpdateSpy(oldModel);
+          if (oldModel.get('likes') !== this.get('likes')) {
+            return this.set('name', 'liked-lv1');
+          } else {
+            return this;
+          }
+        }
+      }
+      Level1ChildModelWithWillUpdate.defaultProps = {
+        name: 'lv1',
+        likes: 0,
+        childArray: () => [new Level2ChildModelWithWillUpdate()]
+      };
+
+      class RootModelWithWillUpdate extends Model {
+        modelWillUpdate(oldModel) {
+          rootModelWillUpdateSpy(oldModel);
+          if (oldModel.get('likes') !== this.get('likes')) {
+            return this.set('name', 'liked-root');
+          } else {
+            return this;
+          }
+        }
+      }
+      RootModelWithWillUpdate.defaultProps = {
+        name: 'root',
+        likes: 0,
+        child: () => new Level1ChildModelWithWillUpdate()
+      };
+
+      const oldRoot = new RootModelWithWillUpdate();
+
+      const pathLv1 = ['child'];
+      const pathLv2 = ['child', 'childArray', 0];
+      const pathLv3 = ['child', 'childArray', 0, 'childObject', 'child'];
+
+      const resultRoot = atomUpdate(oldRoot, [], oldRoot.set('likes', 1));
+      expect(rootModelWillUpdateSpy.callCount).to.eq(1);
+      expect(rootModelWillUpdateSpy.calledWith(oldRoot)).to.be.true;
+      expect(lv1ModelWillUpdateSpy.callCount).to.eq(0);
+      expect(lv2ModelWillUpdateSpy.callCount).to.eq(0);
+      expect(lv3ModelWillUpdateSpy.callCount).to.eq(0);
+      expect(resultRoot.get('name')).to.eq('liked-root');
+
+      rootModelWillUpdateSpy.resetHistory();
+      lv1ModelWillUpdateSpy.resetHistory();
+      lv2ModelWillUpdateSpy.resetHistory();
+      lv3ModelWillUpdateSpy.resetHistory();
+
+      const resultLv1 = atomUpdate(
+        oldRoot,
+        pathLv1,
+        oldRoot.getIn(pathLv1).set('likes', 1)
+      );
+      expect(rootModelWillUpdateSpy.callCount).to.eq(1);
+      expect(rootModelWillUpdateSpy.calledWith(oldRoot));
+      expect(lv1ModelWillUpdateSpy.callCount).to.eq(1);
+      expect(lv1ModelWillUpdateSpy.calledWith(oldRoot.getIn(pathLv1))).to.be
+        .true;
+      expect(lv2ModelWillUpdateSpy.callCount).to.eq(0);
+      expect(lv3ModelWillUpdateSpy.callCount).to.eq(0);
+      expect(resultLv1.get('name')).to.eq('root');
+      expect(resultLv1.getIn(pathLv1).get('name')).to.eq('liked-lv1');
+
+      rootModelWillUpdateSpy.resetHistory();
+      lv1ModelWillUpdateSpy.resetHistory();
+      lv2ModelWillUpdateSpy.resetHistory();
+      lv3ModelWillUpdateSpy.resetHistory();
+
+      const resultLv2 = atomUpdate(
+        oldRoot,
+        pathLv2,
+        oldRoot.getIn(pathLv2).set('likes', 1)
+      );
+      expect(rootModelWillUpdateSpy.callCount).to.eq(1);
+      expect(rootModelWillUpdateSpy.calledWith(oldRoot));
+      expect(lv1ModelWillUpdateSpy.callCount).to.eq(1);
+      expect(lv1ModelWillUpdateSpy.calledWith(oldRoot.getIn(pathLv1))).to.be
+        .true;
+      expect(lv2ModelWillUpdateSpy.callCount).to.eq(1);
+      expect(lv2ModelWillUpdateSpy.calledWith(oldRoot.getIn(pathLv2))).to.be
+        .true;
+      expect(lv3ModelWillUpdateSpy.callCount).to.eq(0);
+      expect(resultLv2.get('name')).to.eq('root');
+      expect(resultLv2.getIn(pathLv1).get('name')).to.eq('lv1');
+      expect(resultLv2.getIn(pathLv2).get('name')).to.eq('liked-lv2');
+
+      rootModelWillUpdateSpy.resetHistory();
+      lv1ModelWillUpdateSpy.resetHistory();
+      lv2ModelWillUpdateSpy.resetHistory();
+      lv3ModelWillUpdateSpy.resetHistory();
+
+      const resultLv3 = atomUpdate(
+        oldRoot,
+        pathLv3,
+        oldRoot.getIn(pathLv3).set('likes', 1)
+      );
+      expect(rootModelWillUpdateSpy.callCount).to.eq(1);
+      expect(rootModelWillUpdateSpy.calledWith(oldRoot));
+      expect(lv1ModelWillUpdateSpy.callCount).to.eq(1);
+      expect(lv1ModelWillUpdateSpy.calledWith(oldRoot.getIn(pathLv1))).to.be
+        .true;
+      expect(lv2ModelWillUpdateSpy.callCount).to.eq(1);
+      expect(lv2ModelWillUpdateSpy.calledWith(oldRoot.getIn(pathLv2))).to.be
+        .true;
+      expect(lv3ModelWillUpdateSpy.callCount).to.eq(1);
+      expect(lv3ModelWillUpdateSpy.calledWith(oldRoot.getIn(pathLv3))).to.be
+        .true;
+      expect(resultLv3.get('name')).to.eq('root');
+      expect(resultLv3.getIn(pathLv1).get('name')).to.eq('lv1');
+      expect(resultLv3.getIn(pathLv2).get('name')).to.eq('lv2');
+      expect(resultLv3.getIn(pathLv3).get('name')).to.eq('liked-lv3');
     });
 
     it('trigger modelDidUpdate', () => {

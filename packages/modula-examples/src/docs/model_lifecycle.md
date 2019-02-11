@@ -10,6 +10,7 @@ In such context, There're a few events that could be useful in development:
 In ModulaJS, we support following life cycle hooks which will be triggered when the above events happened.
 
 - `modelDidMount()`
+- `modelWillUpdate(sourceModel)`
 - `modelDidUpdate(oldModel, newModel)`
 - `modelWillUnmount()`
 
@@ -77,6 +78,32 @@ class InboxModel extends Model {
   sendPollingEnd() {
     // stop polling
     // maybe clear the setInterval handler
+  }
+}
+```
+
+### Use Case 3
+
+A parent model need to constantly monitor and reconcile data within its territory.
+
+```
+class ParentModel extends Model {
+  modelWillUpdate(oldModel) {
+    // keep data in child1 and child2 in sync
+    const dataFromChild1 = this.get('child1').get('data');
+    const dataFromChild2 = this.get('child2').get('data');
+
+    if (!deepEquals(dataFromChild1, dataFromChild2)) {
+      if (oldModel.get('child1') !== this.get('child1')) {
+        // use child1's data since update is from there
+        return this.set('child2', child2 => child2.set('data', dataFromChild1));
+      } else if (oldModel.get('child2') !== this.get('child2')) {
+        // use child2's data since update is from there
+        return this.set('child2', child2 => child2.set('data', dataFromChild1));
+      }
+    }
+
+    return this;
   }
 }
 ```

@@ -14,6 +14,7 @@ import {
   assoc,
   useWith,
   unapply,
+  reduceRight,
   prop
 } from 'ramda';
 import debug from 'debug';
@@ -24,6 +25,7 @@ import {
   setAsPhasingOut
 } from '../model';
 import { diff } from '../diff';
+import { getIntermidiatePaths } from '../path';
 import getReactions from './get_reactions';
 
 const reactionDebug = debug('modula:reaction');
@@ -148,6 +150,22 @@ function houseKeeping(mountedModels, unmountedModels, updatedModels) {
   }, updatedModels);
 }
 
+export function atomUpdate(oldRootModel, path, newReactorModel) {
+  return reduceRight(
+    (p, memo) => {
+      const current = memo.getIn(p);
+
+      if (isModel(current) && current.modelWillUpdate) {
+        return memo.updateIn(p, current.modelWillUpdate(oldRootModel.getIn(p)));
+      } else {
+        return memo;
+      }
+    },
+    oldRootModel.updateIn(path, newReactorModel),
+    getIntermidiatePaths(path)
+  );
+}
+
 function applyReaction(rootModel, reaction, action) {
   reactionDebug('apply reaction', rootModel, reaction, action);
 
@@ -172,7 +190,8 @@ function applyReaction(rootModel, reaction, action) {
     throw new Error(`Some side effects for ${action.type} are not functions`);
   }
 
-  const newRootModel = rootModel.updateIn(action.path, newReactorModel);
+  // updateIn and modelWillUpdate in one transaction
+  const newRootModel = atomUpdate(rootModel, action.path, newReactorModel);
 
   const { mountedModels, unmountedModels, updatedModels } = diff(
     rootModel,

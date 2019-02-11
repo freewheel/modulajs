@@ -9,6 +9,7 @@ import handlingSideEffectsExample from './handling_side_effects';
 import modelContextExample from './model_context';
 import modelLifecycleExample from './model_lifecycle';
 import modelServicesExample from './model_services';
+import linkedDataExample from './linked_data';
 import classMixinExample from './class_mixin';
 import hotZoneExample from './hot_zone';
 import createModelExample from './create_model';
@@ -24,6 +25,7 @@ const examples = [
   modelContextExample,
   modelLifecycleExample,
   modelServicesExample,
+  linkedDataExample,
   classMixinExample,
   hotZoneExample,
   createModelExample
