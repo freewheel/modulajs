@@ -4,7 +4,6 @@ a:focus {
 }
 div.container {
   max-width: 100%;
-  position: fixed;
   height: 100%;
   padding: 0;
 }
@@ -18,7 +17,10 @@ div.column {
 /* sidebar */
 #sidebar {
   background: #aaa2;
-  height: 100%;
+}
+#sidebar-inner {
+  position: fixed;
+  width: 16.666667%
 }
 #sidebar .logo {
   width: 100%;
@@ -53,7 +55,7 @@ div.column {
 #content {
   overflow-y: scroll;
   height: 100%;
-  padding: 0em;
+  padding: 0 0 0 ;
 }
 /* content - banner */
 #content #banner {

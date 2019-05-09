@@ -27,6 +27,10 @@ This will listen */src file changes and run lint/test/build as a local pipeline.
 
 `yarn dev`
 
+Web server is available at `http://localhost:1234`.
+
 ### Run Example Server Only
 
 `yarn start`
+
+Web server is available at `http://localhost:1234`.
