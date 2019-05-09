@@ -34,3 +34,13 @@ Web server is available at `http://localhost:1234`.
 `yarn start`
 
 Web server is available at `http://localhost:1234`.
+
+## Manage Packages
+
+### Install new package or upgrade a package
+
+`lerna add <pkg-name> --scope <sub-project-name>`
+
+### Delete package
+
+`lerna exec --scope=<sub-project-name> -- yarn remove <pkg-name>`
