@@ -49,7 +49,7 @@
   "dependencies": {
     "immutable": "^3.8.2",
     "lodash": "^4.17.4",
-    "prop-types": "^15.6.0",
+    "prop-types": "^15.8.1",
     "react-immutable-proptypes": "^2.1.0",
     "redux": "^3.7.2"
   },
