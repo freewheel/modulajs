@@ -1,6 +1,6 @@
 {
   "name": "@freewheel/modulajs",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "A modularization framework to manage application states using an immutable model tree",
   "main": "lib/index.js",
   "author": "eng-ui@freewheel.tv",
