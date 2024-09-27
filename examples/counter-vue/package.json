@@ -1,0 +1,22 @@
+{
+  "name": "counter-vue-modulajs",
+  "version": "1.1.0",
+  "description": "Counter example with vue + modulajs",
+  "main": "index.js",
+  "author": "yiwsong",
+  "license": "Apache-2.0",
+  "scripts": {
+    "start": "webpack --watch --config webpack.config.js"
+  },
+  "dependencies": {
+    "prop-types": "^15.6.1",
+    "vue": "^2.5.16"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.4",
+    "vue-loader": "^15.0.4",
+    "vue-template-compiler": "^2.5.16",
+    "webpack": "^3.11.0"
+  }
+}
