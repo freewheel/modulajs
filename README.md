@@ -1,3 +1,7 @@
+# DEPRECATED
+
+Use React Hooks for flexibility, not maintained for years.
+
 # ModulaJS
 
 [![NPM version][npm-image]][npm-url]
